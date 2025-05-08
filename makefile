@@ -50,18 +50,20 @@ tt.run:
 
 tt2.build:
 	sudo docker buildx build . \
-		-f tf_2.18_torch_2.7 \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7 \
-		--target working
+		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
+		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
+		> tt2.out 2>&1 &
+
+#		--target working
 
 tt2.run:
 	sudo docker run --gpus all \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7 \
+		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
 
 tt2.it:
 	sudo docker run -it --gpus all \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7 
+		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 
 
 torch_2.6.out:
 	sudo docker buildx build . \
