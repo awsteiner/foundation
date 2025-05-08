@@ -35,26 +35,41 @@ docker_clean2:
 	- sudo docker buildx prune -f
 	- sudo docker system df
 
-# ----------------------------------------------
+# ----------------------------------------------------------------------
+
+tt0.build:
+	sudo docker buildx build . \
+		-f tf_2.18_torch_2.7 \
+		-t awsteiner/foundation:tf_2.18_torch_2.7 \
+		--target working > tt0.out 2>&1 &
+
+tt0.run:
+	sudo docker run --gpus all \
+		-t awsteiner/foundation:tf_2.18_torch_2.7 \
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+
+# ----------------------------------------------------------------------
 
 tt.build:
 	sudo docker buildx build . \
-		-f cuda_12.6_tf_2.18_torch_2.7 \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7 \
-		--target working
+		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
+		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
+		--target working > tt.out 2>&1 &
 
 tt.run:
 	sudo docker run --gpus all \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7 \
+		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
 
+# ----------------------------------------------------------------------
+
 tt2.build:
-	sudo docker buildx build . \
+	sudo docker buildx build --no-cache . \
 		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		> tt2.out 2>&1 &
+		--target working
 
-#		--target working
+#> tt2.out 2>&1 &
 
 tt2.run:
 	sudo docker run --gpus all \
@@ -64,9 +79,4 @@ tt2.run:
 tt2.it:
 	sudo docker run -it --gpus all \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 
-
-torch_2.6.out:
-	sudo docker buildx build . \
-		-f torch_2.6 -t awsteiner/foundation:torch_2.6 \
-		--target working
 
