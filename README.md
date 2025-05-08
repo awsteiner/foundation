@@ -44,7 +44,8 @@ There may be a way to optimize these images to make them smaller.
 image, which gives slightly smaller images than Method 2. The
 downsides are:
 
-  - I don't think Ubuntu 24.04 images are available yet. This requires
+  - I don't think PyTorch/CUDA/Ubuntu 24.04 images are available yet.
+    This requires
     one to rebuild HDF5 from source to create the image (since HDF5
     1.14.6 releases are not pre-built for Ubuntu 22.04).
   - Users of this image are additionally subject to the conda
