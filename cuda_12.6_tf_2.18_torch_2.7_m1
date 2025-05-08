@@ -11,27 +11,50 @@ RUN apt-get -y update && apt-get -y install \
 # Install HDF5
 
 WORKDIR /opt
-RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6-ubuntu-2404_gcc.deb" -o hdf5-1.14.6-ubuntu-2404_gcc.deb
-RUN dpkg -i hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz" \
+  -o hdf5-1.14.6.tar.gz
+RUN tar xvzf hdf5-1.14.6.tar.gz
+RUN rm hdf5-1.14.6.tar.gz
+# The github release has a non-traditional directory name
+WORKDIR /opt/hdf5-1.14.6
+RUN ./configure --with-zlib --with-szlib --prefix=/usr/local/hdf5
+RUN make
+RUN make install
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hdf5/lib
 
 # ───────────────────────────────────────────────────────────────────
 # Ensure h5py uses the installed version of HDF5
 
-RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
+RUN HDF5_DIR=/usr/local/hdf5 pip3 install --break-system-packages \
   --no-binary=h5py h5py==3.13.0
 
 # ───────────────────────────────────────────────────────────────────
-# Install TensorFlow and Torch
+# Install TensorFlow
 
-# Note that Tensorflow and Torch both include their own cuda libraries
-# which are separate from the base image.
+RUN pip3 install --break-system-packages \
+  absl-py==2.2.2 \
+  astunparse==1.6.3 \
+  flatbuffers==25.2.10 \
+  gast==0.6.0 \
+  google-pasta==0.2.0 \
+  grpcio==1.71.0 \
+  keras==3.9.2 \
+  libclang==18.1.1 \
+  ml-dtypes==0.4.1 \
+  numpy==2.0.2 \
+  opt-einsum==3.4.0 \
+  protobuf==5.29.4 \
+  six==1.17.0 \
+  tensorboard==2.18.0 \
+  tensorflow-io-gcs-filesystem==0.37.1 \
+  termcolor==3.1.0 \
+  wrapt==1.17.2
 
-ARG TF_VERSION=tensorflow==2.18.0
-RUN pip3 install --break-system-packages ${TF_VERSION}
+RUN pip3 install --break-system-packages tensorflow==2.18.0
 
-# If desired, output pip requirements file
-ARG OUTPUT_REQ=true
-RUN if [ "$OUTPUT_REQ" = "true" ]; then pip3 freeze > req.txt; cat req.txt; fi
+# If desired, output pip requirements file here
+#FROM working
 
 # ───────────────────────────────────────────────────────────────────
 # Copy the test script, set permissions and environment variables

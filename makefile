@@ -50,13 +50,13 @@ tt0.run:
 
 # ----------------------------------------------------------------------
 
-tt.build:
+tt1.build:
 	sudo docker buildx build . \
 		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
 		--target working > tt.out 2>&1 &
 
-tt.run:
+tt1.run:
 	sudo docker run --gpus all \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"

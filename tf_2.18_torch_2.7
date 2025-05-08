@@ -81,9 +81,8 @@ ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN pip3 install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
-# If desired, output pip requirements file
-ARG OUTPUT_REQ=true
-RUN if [ "$OUTPUT_REQ" = "true" ]; then pip3 freeze > req.txt; cat req.txt; fi
+# If desired, output pip requirements file here
+#FROM working
 
 # ───────────────────────────────────────────────────────────────────
 # Set environment variables
