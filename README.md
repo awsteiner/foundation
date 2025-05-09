@@ -32,7 +32,8 @@ Discussion
 ----------
 
 * TensorFlow is built with a particular HDF5 version, so we install
-the matching version and ensure h5py uses it.
+the matching version and ensure h5py uses it. This helps with
+HDF5 compatibility issues when constructing code with uses HDF5.
 
 * The GPU images require that the Nvidia drivers and the Nvidia
 container toolkit are already installed on the local hardware.
@@ -41,15 +42,17 @@ container toolkit are already installed on the local hardware.
 There may be a way to optimize these images to make them smaller.
 
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
-image, which gives slightly smaller images than Method 2. The
+image, which gives slightly smaller images than Method 2. FOr the base
+image, I'm using the "devel" rather than the "runtime" tag because the
+former includes nvcc. (The base image is already 6.92 GB.) The
 downsides are:
 
   - They're only available for Ubuntu 22.04. I don't think
     PyTorch/CUDA/Ubuntu 24.04 images are available yet. This requires
     one to rebuild HDF5 from source to create the image (since HDF5
     1.14.6 releases are not pre-built for Ubuntu 22.04).
-  - Users of this image are additionally subject to the conda
-    licensing requirements.
+  - Since conda is used in the base image, Users of this image are
+    additionally subject to the conda licensing requirements.
 
 * Method 2 is built on a CUDA image instead. Then, PyTorch
   installation involves manually installing all the PyTorch
@@ -57,6 +60,6 @@ downsides are:
   the CUDA image.
 
 * Both of the GPU images include two scripts, tf_check.sh and
-  torch_check.sh which are used to verify that TensorFlow and Torch
-  work as expected.
+  torch_check.sh which are used to verify that nvcc, TensorFlow and
+  Torch work as expected.
 
