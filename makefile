@@ -5,6 +5,10 @@ help:
 	@echo "docker_clean2:"
 	@echo "docker_show:"
 	@echo "docker_stop:"
+	@echo "tt[0,1,2].build:"
+	@echo "tt[1,2].check:"
+	@echo "tt[0,1,2].run:"
+	@echo "tt[0,1,2].push:"
 
 docker_clean:
 	-sudo docker rm \
@@ -40,43 +44,59 @@ docker_clean2:
 tt0.build:
 	sudo docker buildx build . \
 		-f tf_2.18_torch_2.7 \
+		--no-cache \
 		-t awsteiner/foundation:tf_2.18_torch_2.7 \
 		--target working > tt0.out 2>&1 &
 
 tt0.run:
-	sudo docker run --gpus all \
-		-t awsteiner/foundation:tf_2.18_torch_2.7 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+	sudo docker run --gpus all -it --rm \
+		-t awsteiner/foundation:tf_2.18_torch_2.7 
+
+tt0.push:
+	sudo docker push \
+		awsteiner/foundation:tf_2.18_torch_2.7
+
 
 # ----------------------------------------------------------------------
 
 tt1.build:
 	sudo docker buildx build . \
 		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
+		--no-cache \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
-		--target working > tt.out 2>&1 &
+		--target working > tt1.out 2>&1 &
 
-tt1.run:
-	sudo docker run --gpus all \
+tt1.check:
+	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+
+tt1.run:
+	sudo docker run --gpus all -it --rm \
+		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 
+
+tt1.push:
+	sudo docker push \
+		awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1
 
 # ----------------------------------------------------------------------
 
 tt2.build:
 	sudo docker buildx build --no-cache . \
 		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
+		--no-cache \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		--target working
+		--target working > tt2.out 2>&1 &
 
-#> tt2.out 2>&1 &
-
-tt2.run:
-	sudo docker run --gpus all \
+tt2.check:
+	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
 
-tt2.it:
-	sudo docker run -it --gpus all \
+tt2.run:
+	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 
 
+tt2.push:
+	sudo docker push \
+		awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2

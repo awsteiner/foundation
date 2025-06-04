@@ -44,7 +44,7 @@ RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
 # If desired, output pip requirements file here
-FROM working
+#FROM working
 
 # ───────────────────────────────────────────────────────────────────
 # Copy the test script, set permissions and environment variables
@@ -55,8 +55,6 @@ COPY torch_check.sh ./
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/lib/python3.12/dist-packages/nvidia/cusparselt/lib:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
 RUN chmod 777 tf_check.sh torch_check.sh
 WORKDIR /
-
-        
 
 
 
