@@ -17,9 +17,15 @@ docker_clean:
 	`sudo docker images --all | grep -i -v container | awk '{print $$3}'`
 
 docker_show:
-	- sudo docker ps --all
+	@echo "Containers:"
+	- @sudo docker ps --all
+	@echo " "
+	@echo "Images:"
 	- sudo docker images --all
+	@echo " "
+	@echo "System:"
 	- sudo docker system df
+	@echo " "
 
 docker_make_cache:
 	sudo docker create -v /mnt/ccache:/ccache --name ccache debian
