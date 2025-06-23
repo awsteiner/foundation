@@ -14,5 +14,8 @@ echo ""
 echo "NVCC version:"
 nvcc --version
 echo ""
+echo "HDF5 version:"
+python3 -c "import h5py; print(h5py.__version__); print(h5py.version.hdf5_version)"
+echo ""
 echo "TensorFlow:"
 python3 -c "import tensorflow as tf; print(' '); print('tensorflow config:'); print('TF GPU devices:',tf.config.list_physical_devices('GPU')); print('TF build info:',tf.sysconfig.get_build_info())"

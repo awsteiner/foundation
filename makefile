@@ -106,3 +106,21 @@ tt2.run:
 tt2.push:
 	sudo docker push \
 		awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2
+
+# ----------------------------------------------------------------------
+
+arch.build:
+	sudo docker buildx build . \
+		-f arch -t awsteiner/foundation:arch \
+		--no-cache \
+		--target working > arch.out 2>&1 &
+
+arch.run:
+	sudo docker run --gpus all -it --rm \
+		-t awsteiner/foundation:arch
+
+arch.push:
+	sudo docker push \
+		awsteiner/foundation:arch
+
+

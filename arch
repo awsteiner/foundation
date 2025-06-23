@@ -1,0 +1,12 @@
+FROM archlinux:latest AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
+
+# Install system dependencies
+RUN pacman -Sy --noconfirm \
+    base-devel gcc autoconf automake libtool git curl boost eigen \
+    lapack arpack superlu fftw hdf5 openblas python python-numpy \
+    python-pip python-matplotlib python-scikit-learn python-scipy \
+    python-tensorflow python-ipykernel python-distro python-pytest \
+    python-pytorch unzip && pacman -Scc --noconfirm
+
+RUN pip list
