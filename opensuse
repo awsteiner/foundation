@@ -1,23 +1,12 @@
-FROM archlinux:latest AS working
+FROM opensuse/tumbleweed AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 # Install system dependencies
-RUN pacman -Sy --noconfirm \
-    base-devel gcc git curl eigen \
-    lapack arpack superlu fftw hdf5 openblas python python-numpy \
-    python-pip python-matplotlib python-scikit-learn python-scipy \
-    python-ipykernel python-distro python-pytest \
-    unzip
-
-RUN pacman -Sy --noconfirm boost
-
-RUN pacman -Sy --noconfirm python-tensorflow
-
-RUN pacman -Sy --noconfirm python-pytorch
-
-RUN pacman -Scc --noconfirm
-
-RUN pip list
+RUN zypper --non-interactive install --no-recommends ccache gawk \
+gcc-c++ hdf5-devel libboost_headers-devel libboost_locale-devel \
+libtool make pkgconfig python3 readline-devel "pkgconfig(armadillo)" \
+"pkgconfig(eigen3)" "pkgconfig(fftw3)" "pkgconfig(gsl)" \
+"pkgconfig(ncurses)" python3-pip tensorflow2 python3-pytorch
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for

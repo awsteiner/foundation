@@ -124,3 +124,20 @@ arch.push:
 		awsteiner/foundation:arch
 
 
+# ----------------------------------------------------------------------
+
+opensuse.build:
+	sudo docker buildx build . \
+		-f opensuse -t awsteiner/foundation:opensuse \
+		--no-cache \
+		--target working > opensuse.out 2>&1 &
+
+opensuse.run:
+	sudo docker run --gpus all -it --rm \
+		-t awsteiner/foundation:opensuse
+
+opensuse.push:
+	sudo docker push \
+		awsteiner/foundation:opensuse
+
+
