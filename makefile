@@ -112,7 +112,6 @@ tt2.push:
 arch.build:
 	sudo docker buildx build . \
 		-f arch -t awsteiner/foundation:arch \
-		--no-cache \
 		--target working > arch.out 2>&1 &
 
 arch.run:

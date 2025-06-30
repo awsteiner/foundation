@@ -15,4 +15,5 @@ echo "NVCC version:"
 nvcc --version
 echo ""
 echo "Torch:"
+python3 -c "import torch; print('Torch version:',torch.__version__);"
 python3 -c "import torch; print('CUDA avail:',torch.cuda.is_available()); print('CUDA version:',torch.version.cuda); print('CUDA built:',torch.backends.cuda.is_built()); print('CUDNN version:',torch.backends.cudnn.version()); print('CUDA device name:',torch.cuda.get_device_name(0))"
