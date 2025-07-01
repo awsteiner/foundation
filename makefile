@@ -54,6 +54,11 @@ tt0.build:
 		-t awsteiner/foundation:tf_2.18_torch_2.7 \
 		--target working > tt0.out 2>&1 &
 
+tt0.check:
+	sudo docker run --gpus all --rm \
+		-t awsteiner/foundation:tf_2.18_torch_2.7 \
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+
 tt0.run:
 	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:tf_2.18_torch_2.7 
@@ -112,8 +117,13 @@ tt2.push:
 arch.build:
 	sudo docker buildx build . \
 		-f arch -t awsteiner/foundation:arch \
+		--no-cache \
 		--target working > arch.out 2>&1 &
 
+arch.check:
+	sudo docker run --gpus all --rm \
+		-t awsteiner/foundation:arch \
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
 arch.run:
 	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:arch
