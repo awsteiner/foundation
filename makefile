@@ -131,6 +131,10 @@ opensuse.build:
 		--no-cache \
 		--target working > opensuse.out 2>&1 &
 
+opensuse.check:
+	sudo docker run --gpus all --rm \
+		-t awsteiner/foundation:opensuse \
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
 opensuse.run:
 	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:opensuse

@@ -2,11 +2,19 @@ FROM opensuse/tumbleweed AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 # Install system dependencies
-RUN zypper --non-interactive install --no-recommends ccache gawk \
-gcc-c++ hdf5-devel libboost_headers-devel libboost_locale-devel \
-libtool make pkgconfig python3 readline-devel "pkgconfig(armadillo)" \
-"pkgconfig(eigen3)" "pkgconfig(fftw3)" "pkgconfig(gsl)" \
-"pkgconfig(ncurses)" python3-pip tensorflow2 python3-pytorch
+RUN zypper --non-interactive install \
+--no-recommends ccache gawk gcc-c++ hdf5-devel libboost_headers-devel \
+libboost_locale-devel libtool make python312 readline-devel gsl git \
+libncurses6 python312-pip eigen3-devel fftw3-devel armadillo-devel 
+
+ARG TORCH_VERSION="torch==2.7.1"
+ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
+RUN pip install --break-system-packages ${TORCH_VERSION} \
+  --index-url ${TORCH_URL}
+
+# Tensorflow doesn't yet support python3.13 which is available on
+# OpenSuse tumbleweed
+RUN pip install --break-system-packages tensorflow==2.19.0
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for

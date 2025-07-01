@@ -36,8 +36,15 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 ARG TF_VERSION=tensorflow==2.18.0
 RUN pip3 install --break-system-packages keras==3.10.0 ${TF_VERSION}
 RUN pip3 install --break-system-packages \
-  filelock fsspec jinja2 networkx setuptools sympy \
-  triton typing-extensions nvidia-cusparselt-cu12
+  filelock==3.18.0 \
+  fsspec==2025.5.1 \
+  jinja2==3.1.6 \
+  networkx==3.5 \
+  setuptools==68.1.2 \
+  sympy==1.14.0 \
+  triton==3.3.1 \
+  typing-extensions==4.14.0 \
+  nvidia-cusparselt-cu12==0.7.1
 ARG TORCH_VERSION="torch==2.7.0"
 ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
 RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
