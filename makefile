@@ -57,7 +57,8 @@ tt0.build:
 tt0.check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:tf_2.18_torch_2.7 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		> tt0.check &
 
 tt0.run:
 	sudo docker run --gpus all -it --rm \
@@ -80,7 +81,8 @@ tt1.build:
 tt1.check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		> tt1.check &
 
 tt1.run:
 	sudo docker run --gpus all -it --rm \
@@ -102,7 +104,8 @@ tt2.build:
 tt2.check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		> tt2.check &
 
 tt2.run:
 	sudo docker run --gpus all -it --rm \
@@ -123,7 +126,8 @@ arch.build:
 arch.check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:arch \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		> arch.check &
 arch.run:
 	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:arch
@@ -144,7 +148,8 @@ opensuse.build:
 opensuse.check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:opensuse \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh"
+		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		> opensuse.check &
 opensuse.run:
 	sudo docker run --gpus all -it --rm \
 		-t awsteiner/foundation:opensuse

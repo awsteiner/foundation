@@ -2,7 +2,7 @@ Foundation
 ==========
 
 Repository for constructing Docker images combining nvcc, CUDA, Torch
-and TensorFlow on Ubuntu. Images found at
+and TensorFlow. Images found at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general .
 
 * tf_2.18_torch_2.7 (CPU only; 1.29 GB)

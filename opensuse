@@ -17,6 +17,12 @@ RUN pip install --break-system-packages ${TORCH_VERSION} \
 RUN pip install --break-system-packages tensorflow==2.19.0
 
 # ───────────────────────────────────────────────────────────────────
+# The opensuse python312 package doesn't make a python3 executable,
+# so we just make a symlink
+
+RUN ln -s /usr/bin/python3.12 /usr/bin/python3
+
+# ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for
 # reporting version information)
 
