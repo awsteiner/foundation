@@ -16,17 +16,6 @@ docker_clean:
 	-sudo docker rmi \
 	`sudo docker images --all | grep -i -v container | awk '{print $$3}'`
 
-docker_show:
-	@echo "Containers:"
-	- @sudo docker ps --all
-	@echo " "
-	@echo "Images:"
-	- sudo docker images --all
-	@echo " "
-	@echo "System:"
-	- sudo docker system df
-	@echo " "
-
 docker_make_cache:
 	sudo docker create -v /mnt/ccache:/ccache --name ccache debian
 
@@ -47,34 +36,87 @@ docker_clean2:
 
 # ----------------------------------------------------------------------
 
-ubuntu.build:
+# Nicknames
+NICKS := ubuntu o
+# Dockerfiles
+DFILE := u24.04_tf_2.18_torch_2.7 test2
+
+define RULE_tlate
+$(1).nc:
 	sudo docker buildx build . \
-		-f u24.04_tf_2.18_torch_2.7 \
+		-f $$(word $(2), $(DFILE)) \
+		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		--no-cache \
-		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
-		--target working > ubuntu.out 2>&1 &
+		--target working | tee $(1).out 2>&1 &
 
-ubuntu.check:
+$(1).build:
+	sudo docker buildx build . \
+		-f $$(word $(2), $(DFILE)) \
+		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
+		--target working | tee $(1).out 2>&1 &
+
+$(1).check:
 	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
+		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> ubuntu.check &
+		| tee $(1).check &
 
-ubuntu.run:
+$(1).run:
 	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 
+		-t awsteiner/foundation:$$(word $(2), $(DFILE))
 
-ubuntu.push:
+$(1).push:
 	sudo docker push \
-		awsteiner/foundation:u24.04_tf_2.18_torch_2.7
+		awsteiner/foundation:$$(word $(2), $(DFILE))
+
+endef
+
+# Loop over the indices of the targets
+INDEX := $(shell seq 1 $(words $(NICKS)))
+$(foreach i,$(INDEX),$(eval $(call RULE_tlate,$(word $(i),$(NICKS)),$(i))))
+
+# ----------------------------------------------------------------------
+
+# ubuntu.nc:
+# 	sudo docker buildx build . \
+# 		-f u24.04_tf_2.18_torch_2.7 \
+# 		--no-cache \
+# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
+# 		--target working > ubuntu.out 2>&1 &
+
+# ubuntu.build:
+# 	sudo docker buildx build . \
+# 		-f u24.04_tf_2.18_torch_2.7 \
+# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
+# 		--target working > ubuntu.out 2>&1 &
+
+# ubuntu.check:
+# 	sudo docker run --gpus all --rm \
+# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
+# 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+# 		> ubuntu.check &
+
+# ubuntu.run:
+# 	sudo docker run --gpus all -it --rm \
+# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 
+
+# ubuntu.push:
+# 	sudo docker push \
+# 		awsteiner/foundation:u24.04_tf_2.18_torch_2.7
 
 
 # ----------------------------------------------------------------------
 
-tt1.build:
+tt1.nc:
 	sudo docker buildx build . \
 		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
 		--no-cache \
+		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
+		--target working > tt1.out 2>&1 &
+
+tt1.build:
+	sudo docker buildx build . \
+		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
 		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
 		--target working > tt1.out 2>&1 &
 
@@ -94,10 +136,16 @@ tt1.push:
 
 # ----------------------------------------------------------------------
 
-tt2.build:
+tt2.nc:
 	sudo docker buildx build --no-cache . \
 		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
 		--no-cache \
+		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
+		--target working > tt2.out 2>&1 &
+
+tt2.build:
+	sudo docker buildx build --no-cache . \
+		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
 		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
 		--target working > tt2.out 2>&1 &
 
@@ -117,10 +165,15 @@ tt2.push:
 
 # ----------------------------------------------------------------------
 
-arch.build:
+arch.nc:
 	sudo docker buildx build . \
 		-f arch -t awsteiner/foundation:arch \
 		--no-cache \
+		--target working > arch.out 2>&1 &
+
+arch.build:
+	sudo docker buildx build . \
+		-f arch -t awsteiner/foundation:arch \
 		--target working > arch.out 2>&1 &
 
 arch.check:
@@ -139,11 +192,17 @@ arch.push:
 
 # ----------------------------------------------------------------------
 
-opensuse.build:
+opensuse.nc:
 	sudo docker buildx build . \
 		-f ost_tf_2.18_torch_2.7.1 \
 		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
 		--no-cache \
+		--target working > opensuse.out 2>&1 &
+
+opensuse.build:
+	sudo docker buildx build . \
+		-f ost_tf_2.18_torch_2.7.1 \
+		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
 		--target working > opensuse.out 2>&1 &
 
 opensuse.check:

@@ -5,6 +5,9 @@ echo ""
 echo "LD_LIBRARY_PATH:"
 echo $LD_LIBRARY_PATH
 echo ""
+echo "gcc version:"
+gcc --version
+echo ""
 echo "Python version:"
 python3 --version
 echo ""

@@ -1,13 +1,14 @@
 Foundation
 ==========
 
-Repository for constructing Docker images combining nvcc, CUDA, Torch
-and TensorFlow. Images found at
+Repository for constructing Docker images combining Torch and
+TensorFlow, some with cuda support. Images found at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general .
 
-* tf_2.18_torch_2.7 (CPU only; 1.29 GB)
+* u24.04_tf_2.18_torch_2.7 (CPU only; 1.40 GB)
 
   - Ubuntu 24.04
+  - gcc 13.3.0
   - HDF5 1.14.6/h5py 3.13.0
   - numpy 2.0.2
   - Torch 2.7
@@ -37,7 +38,7 @@ Discussion
   compatibility issues when constructing code with uses HDF5.
 
 * The images include two scripts, tf_check.sh and torch_check.sh which
-  are used to verify that nvcc, TensorFlow and Torch work as expected.
+  are used to verify that TensorFlow, Torch, and/or nvcc work as expected.
 
 GPUs and CUDA
 -------------
