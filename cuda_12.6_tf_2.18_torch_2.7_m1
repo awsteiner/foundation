@@ -1,5 +1,6 @@
 ARG BASE=pytorch/pytorch:2.7.0-cuda12.6-cudnn9-devel
 FROM ${BASE} AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 # ───────────────────────────────────────────────────────────────────
 # Install Python, pip, and curl

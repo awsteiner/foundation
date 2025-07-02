@@ -2,18 +2,16 @@ FROM archlinux:latest AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 # Install system dependencies
-RUN pacman -Sy --noconfirm \
-    base-devel gcc git curl eigen \
-    lapack arpack superlu fftw hdf5 openblas python python-numpy \
-    python-pip python-matplotlib python-scikit-learn python-scipy \
-    python-ipykernel python-distro python-pytest \
-    unzip
+#
+# -S, --sync Synchronize packages.
+# -Sy, --refresh Download a fresh copy of the master
+#               package databases (repo.db) from the server(s)
+# -Sc, --clean
+#
 
-RUN pacman -Sy --noconfirm boost
-
-RUN pacman -Sy --noconfirm python-tensorflow
-
-RUN pacman -Sy --noconfirm python-pytorch
+RUN pacman -Sy --noconfirm base-devel gcc git curl \
+    hdf5 python python-numpy python-pip python-tensorflow \
+    python-pytorch
 
 RUN pacman -Scc --noconfirm
 

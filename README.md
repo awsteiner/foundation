@@ -33,20 +33,26 @@ Discussion
 ----------
 
 * TensorFlow is built with a particular HDF5 version, so we install
-the matching version and ensure h5py uses it. This helps with
-HDF5 compatibility issues when constructing code with uses HDF5.
+  the matching version and ensure h5py uses it. This helps with HDF5
+  compatibility issues when constructing code with uses HDF5.
+
+* The images include two scripts, tf_check.sh and torch_check.sh which
+  are used to verify that nvcc, TensorFlow and Torch work as expected.
+
+GPUs and CUDA
+-------------
 
 * The GPU images require that the Nvidia drivers and the Nvidia
-container toolkit are already installed on the local hardware.
+  container toolkit are already installed on the local hardware.
 
-* CUDA and GPU support is what leads to large image sizes.
-There may be a way to optimize these images to make them smaller.
+* CUDA and GPU support is what leads to large image sizes. There may
+  be a way to optimize these images to make them smaller.
 
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
-image, which gives slightly smaller images than Method 2. FOr the base
-image, I'm using the "devel" rather than the "runtime" tag because the
-former includes nvcc. (The base image is already 6.92 GB.) The
-downsides are:
+  image, which gives slightly smaller images than Method 2. For the
+  base image, I'm using the "devel" rather than the "runtime" tag
+  because the former includes nvcc. (The base image is already 6.92
+  GB.) The downsides are:
 
   - They're only available for Ubuntu 22.04. I don't think
     PyTorch/CUDA/Ubuntu 24.04 images are available yet. This requires
@@ -59,8 +65,4 @@ downsides are:
   installation involves manually installing all the PyTorch
   dependencies except for the CUDA dependencies already included in
   the CUDA image.
-
-* Both of the GPU images include two scripts, tf_check.sh and
-  torch_check.sh which are used to verify that nvcc, TensorFlow and
-  Torch work as expected.
 

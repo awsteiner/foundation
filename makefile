@@ -47,26 +47,26 @@ docker_clean2:
 
 # ----------------------------------------------------------------------
 
-tt0.build:
+ubuntu.build:
 	sudo docker buildx build . \
-		-f tf_2.18_torch_2.7 \
+		-f u24.04_tf_2.18_torch_2.7 \
 		--no-cache \
-		-t awsteiner/foundation:tf_2.18_torch_2.7 \
-		--target working > tt0.out 2>&1 &
+		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
+		--target working > ubuntu.out 2>&1 &
 
-tt0.check:
+ubuntu.check:
 	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:tf_2.18_torch_2.7 \
+		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> tt0.check &
+		> ubuntu.check &
 
-tt0.run:
+ubuntu.run:
 	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:tf_2.18_torch_2.7 
+		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 
 
-tt0.push:
+ubuntu.push:
 	sudo docker push \
-		awsteiner/foundation:tf_2.18_torch_2.7
+		awsteiner/foundation:u24.04_tf_2.18_torch_2.7
 
 
 # ----------------------------------------------------------------------
@@ -141,21 +141,23 @@ arch.push:
 
 opensuse.build:
 	sudo docker buildx build . \
-		-f opensuse -t awsteiner/foundation:opensuse \
+		-f ost_tf_2.18_torch_2.7.1 \
+		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
 		--no-cache \
 		--target working > opensuse.out 2>&1 &
 
 opensuse.check:
 	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:opensuse \
+		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
 		> opensuse.check &
+
 opensuse.run:
 	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:opensuse
+		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1
 
 opensuse.push:
 	sudo docker push \
-		awsteiner/foundation:opensuse
+		awsteiner/foundation:ost_tf_2.18_torch_2.7.1
 
 

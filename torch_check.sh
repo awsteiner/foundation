@@ -11,9 +11,15 @@ echo ""
 echo "Output of 'nvidia-smi':"
 nvidia-smi
 echo ""
-echo "NVCC version:"
-nvcc --version
-echo ""
-echo "Torch:"
-python3 -c "import torch; print('Torch version:',torch.__version__);"
-python3 -c "import torch; print('CUDA avail:',torch.cuda.is_available()); print('CUDA version:',torch.version.cuda); print('CUDA built:',torch.backends.cuda.is_built()); print('CUDNN version:',torch.backends.cudnn.version()); print('CUDA device name:',torch.cuda.get_device_name(0))"
+echo "Checking for nvcc:"
+NVCC_CMD="nvcc --version"
+if $NVCC_CMD; then
+    echo ""
+    echo "Torch:"
+    python3 -c "import torch; print('Torch version:',torch.__version__);"
+    python3 -c "import torch; print('CUDA avail:',torch.cuda.is_available()); print('CUDA version:',torch.version.cuda); print('CUDA built:',torch.backends.cuda.is_built()); print('CUDNN version:',torch.backends.cudnn.version()); print('CUDA device name:',torch.cuda.get_device_name(0))"
+else
+    echo ""
+    echo "Torch:"
+    python3 -c "import torch; print('Torch version:',torch.__version__);"
+fi
