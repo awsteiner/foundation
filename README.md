@@ -2,8 +2,10 @@ Foundation
 ==========
 
 Repository for constructing Docker images combining Torch and
-TensorFlow, some with cuda support. Images found at
-https://hub.docker.com/repository/docker/awsteiner/foundation/general .
+TensorFlow, some with cuda support (only on x86 for now). Images found
+at
+https://hub.docker.com/repository/docker/awsteiner/foundation/general
+.
 
 * u24.04_tf_2.18_torch_2.7 (CPU only; 1.40 GB)
 
@@ -14,7 +16,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general .
   - Torch 2.7
   - TensorFlow 2.18
 
-* cuda_12.6_tf_2.18_torch_2.7 (method 1; 8.40GB)
+* cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.40GB)
 
   - Ubuntu 22.04
   - HDF5 1.14.6/h5py 3.13.0
@@ -22,13 +24,29 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general .
   - Torch 2.7
   - TensorFlow 2.18
 
-* cuda_12.8_tf_2.18_torch_2.7 (method 2; 9.88GB)
+* cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.88GB)
 
   - Ubuntu 24.04
   - HDF5 1.14.6/h5py 3.13.0
   - CUDA 12.8
   - Torch 2.7
   - TensorFlow 2.18
+
+* ost_tf_2.18_torch_2.7.1 (CPU only; 2.06 GB)
+
+  - openSUSE Tumbleweed
+  - gcc 15.1.1
+  - HDF5 1.14.6/h5py 3.12.11
+  - Torch 2.7.1
+  - TensorFlow 2.19
+
+* arch (CPU only; 2.95 GB)
+
+  - Built on archlinux:latest
+  - gcc 15.1.1
+  - HDF5 1.14.6/h5py 3.14.0
+  - Torch 2.7.1
+  - TensorFlow 2.19
 
 Discussion
 ----------

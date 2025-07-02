@@ -37,9 +37,10 @@ docker_clean2:
 # ----------------------------------------------------------------------
 
 # Nicknames
-NICKS := ubuntu o
+NICKS := ubuntu opensuse arch m1 m2
 # Dockerfiles
-DFILE := u24.04_tf_2.18_torch_2.7 test2
+DFILE := u24.04_tf_2.18_torch_2.7 ost_tf_2.18_torch_2.7.1 arch \
+	cuda_12.6_tf_2.18_torch_2.7_m1 cuda_12.8_tf_2.18_torch_2.7_m2
 
 define RULE_tlate
 $(1).nc:
@@ -77,146 +78,5 @@ $(foreach i,$(INDEX),$(eval $(call RULE_tlate,$(word $(i),$(NICKS)),$(i))))
 
 # ----------------------------------------------------------------------
 
-# ubuntu.nc:
-# 	sudo docker buildx build . \
-# 		-f u24.04_tf_2.18_torch_2.7 \
-# 		--no-cache \
-# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
-# 		--target working > ubuntu.out 2>&1 &
-
-# ubuntu.build:
-# 	sudo docker buildx build . \
-# 		-f u24.04_tf_2.18_torch_2.7 \
-# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
-# 		--target working > ubuntu.out 2>&1 &
-
-# ubuntu.check:
-# 	sudo docker run --gpus all --rm \
-# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 \
-# 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-# 		> ubuntu.check &
-
-# ubuntu.run:
-# 	sudo docker run --gpus all -it --rm \
-# 		-t awsteiner/foundation:u24.04_tf_2.18_torch_2.7 
-
-# ubuntu.push:
-# 	sudo docker push \
-# 		awsteiner/foundation:u24.04_tf_2.18_torch_2.7
-
-
-# ----------------------------------------------------------------------
-
-tt1.nc:
-	sudo docker buildx build . \
-		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
-		--no-cache \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
-		--target working > tt1.out 2>&1 &
-
-tt1.build:
-	sudo docker buildx build . \
-		-f cuda_12.6_tf_2.18_torch_2.7_m1 \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
-		--target working > tt1.out 2>&1 &
-
-tt1.check:
-	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> tt1.check &
-
-tt1.run:
-	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1 
-
-tt1.push:
-	sudo docker push \
-		awsteiner/foundation:cuda_12.6_tf_2.18_torch_2.7_m1
-
-# ----------------------------------------------------------------------
-
-tt2.nc:
-	sudo docker buildx build --no-cache . \
-		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
-		--no-cache \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		--target working > tt2.out 2>&1 &
-
-tt2.build:
-	sudo docker buildx build --no-cache . \
-		-f cuda_12.8_tf_2.18_torch_2.7_m2 \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		--target working > tt2.out 2>&1 &
-
-tt2.check:
-	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> tt2.check &
-
-tt2.run:
-	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2 
-
-tt2.push:
-	sudo docker push \
-		awsteiner/foundation:cuda_12.8_tf_2.18_torch_2.7_m2
-
-# ----------------------------------------------------------------------
-
-arch.nc:
-	sudo docker buildx build . \
-		-f arch -t awsteiner/foundation:arch \
-		--no-cache \
-		--target working > arch.out 2>&1 &
-
-arch.build:
-	sudo docker buildx build . \
-		-f arch -t awsteiner/foundation:arch \
-		--target working > arch.out 2>&1 &
-
-arch.check:
-	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:arch \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> arch.check &
-arch.run:
-	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:arch
-
-arch.push:
-	sudo docker push \
-		awsteiner/foundation:arch
-
-
-# ----------------------------------------------------------------------
-
-opensuse.nc:
-	sudo docker buildx build . \
-		-f ost_tf_2.18_torch_2.7.1 \
-		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
-		--no-cache \
-		--target working > opensuse.out 2>&1 &
-
-opensuse.build:
-	sudo docker buildx build . \
-		-f ost_tf_2.18_torch_2.7.1 \
-		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
-		--target working > opensuse.out 2>&1 &
-
-opensuse.check:
-	sudo docker run --gpus all --rm \
-		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1 \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		> opensuse.check &
-
-opensuse.run:
-	sudo docker run --gpus all -it --rm \
-		-t awsteiner/foundation:ost_tf_2.18_torch_2.7.1
-
-opensuse.push:
-	sudo docker push \
-		awsteiner/foundation:ost_tf_2.18_torch_2.7.1
 
 
