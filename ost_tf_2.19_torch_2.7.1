@@ -6,9 +6,6 @@ RUN zypper --non-interactive install \
 --no-recommends ccache gawk gcc-c++ hdf5-devel \
 make python312 git python312-pip 
 
-# readline-devel gsl-devel libboost_headers-devel libboost_locale-devel
-# libtool libncurses6 eigen3-devel fftw3-devel armadillo-devel 
-
 ARG TORCH_VERSION="torch==2.7.1"
 ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN pip install --break-system-packages ${TORCH_VERSION} \
