@@ -33,9 +33,10 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 
 # Note that Tensorflow and Torch both include their own cuda libraries
 # which are separate from the base image.
+# (needs to be keras>=3.11 for security)
 
 ARG TF_VERSION=tensorflow==2.18.0
-RUN pip3 install --break-system-packages keras==3.10.0 ${TF_VERSION}
+RUN pip3 install --break-system-packages keras==3.11.0 ${TF_VERSION}
 RUN pip3 install --break-system-packages \
   filelock==3.18.0 \
   fsspec==2025.5.1 \
