@@ -7,45 +7,50 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u24.04_tf_2.18_torch_2.7 (CPU only; 1.40 GB)
+* u24.04_tf_2.18_torch_2.7 (CPU only; 1.41 GB)
 
   - Ubuntu 24.04
   - gcc 13.3.0
+  - Python 3.12.3
   - HDF5 1.14.6/h5py 3.13.0
   - numpy 2.0.2
   - Torch 2.7
   - TensorFlow 2.18
 
-* cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.40GB)
+* cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.41GB)
 
   - Ubuntu 22.04
+  - Python 3.11.12
   - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 12.6
+  - CUDA 12.6.3
   - Torch 2.7
-  - TensorFlow 2.18
+  - TensorFlow 2.18.0
 
-* cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.88GB)
+* cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.89GB)
 
   - Ubuntu 24.04
+  - Python 3.12.3
   - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 12.8
+  - CUDA 12.8.1
   - Torch 2.7
   - TensorFlow 2.18
 
-* ost_tf_2.18_torch_2.7.1 (CPU only; 2.06 GB)
+* ost_tf_2.19_torch_2.7.1 (CPU only; 1.98 GB)
 
   - openSUSE Tumbleweed
-  - gcc 15.1.1
-  - HDF5 1.14.6/h5py 3.12.11
+  - gcc 15.2.0
+  - Python 3.12.11
+  - HDF5 1.14.6/h5py 3.14.0
   - Torch 2.7.1
   - TensorFlow 2.19
 
-* arch (CPU only; 2.95 GB)
+* arch (CPU only; 2.89 GB)
 
   - Built on archlinux:latest
-  - gcc 15.1.1
+  - gcc 15.2.1
+  - Python 3.13.7
   - HDF5 1.14.6/h5py 3.14.0
-  - Torch 2.7.1
+  - Torch 2.8.0
   - TensorFlow 2.19
 
 Discussion
