@@ -1,13 +1,6 @@
-ARG BASE=nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
+ARG BASE=ubuntu:24.04
 FROM ${BASE} AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
-
-# ───────────────────────────────────────────────────────────────────
-# To fix tzdata asking for a timezone during installation
-# can set up later using sudo dpkg-reconfigure tzdata I think.
-
-ARG DEBIAN_FRONTEND=noninteractive
-# Alternatively, ENV DEBIAN_FRONTEND noninteractive
 
 # ───────────────────────────────────────────────────────────────────
 # Install Python, pip, and curl
@@ -35,36 +28,74 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 # which are separate from the base image.
 # (needs to be keras>=3.12 for security)
 
-ARG TF_VERSION=tensorflow==2.18.0
-RUN pip3 install --break-system-packages keras==3.12.0 ${TF_VERSION}
 RUN pip3 install --break-system-packages \
-  filelock==3.18.0 \
-  fsspec==2025.5.1 \
-  jinja2==3.1.6 \
-  networkx==3.5 \
-  setuptools==68.1.2 \
-  sympy==1.14.0 \
-  triton==3.3.1 \
-  typing-extensions==4.14.0 \
-  nvidia-cusparselt-cu12==0.7.1
-ARG TORCH_VERSION="torch==2.7.0"
-ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
-RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
+absl-py==2.2.2 \
+astunparse==1.6.3 \
+certifi==2025.4.26 \
+charset-normalizer==3.4.2 \
+filelock==3.13.1 \
+flatbuffers==25.2.10 \
+fsspec==2024.6.1 \
+gast==0.6.0 \
+google-pasta==0.2.0 \
+grpcio==1.71.0 \
+h5py==3.13.0 \
+idna==3.10 \
+joblib==1.4.2 \
+Jinja2==3.1.4 \
+keras==3.12 \
+libclang==18.1.1 \
+Markdown==3.8 \
+markdown-it-py==3.0.0 \
+MarkupSafe==3.0.2 \
+mdurl==0.1.2 \
+ml-dtypes==0.4.1 \
+mpmath==1.3.0 \
+namex==0.0.9 \
+networkx==3.3 \
+numpy==2.0.2 \
+opt_einsum==3.4.0 \
+optree==0.15.0 \
+packaging==25.0 \
+protobuf==5.29.4 \
+Pygments==2.19.1 \
+requests==2.32.4 \
+rich==14.0.0 \
+scikit-learn==1.6.0 \
+scipy==1.14.1 \
+setuptools==68.1.2 \
+six==1.17.0 \
+sympy==1.13.3 \
+termcolor==3.1.0 \
+threadpoolctl==3.5.0 \
+typing_extensions==4.13.2 \
+urllib3==2.5.0 \
+Werkzeug==3.1.3 \
+wheel==0.42.0 \
+wrapt==1.17.2
+
+ARG TF_VERSION=tensorflow_cpu==2.20.0
+RUN pip3 install --break-system-packages ${TF_VERSION}
+
+ARG TORCH_VERSION="torch==2.9.0"
+ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
+RUN pip3 install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
 # If desired, output pip requirements file here
 #FROM working
 
 # ───────────────────────────────────────────────────────────────────
-# Copy the test script, set permissions and environment variables
+# Copy scripts (even though we don't have cuda these are useful for
+# reporting version information)
 
 WORKDIR /opt
 COPY tf_check.sh ./
 COPY torch_check.sh ./
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/lib/python3.12/dist-packages/nvidia/cusparselt/lib:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
 RUN chmod 777 tf_check.sh torch_check.sh
+
+# ───────────────────────────────────────────────────────────────────
+# Set environment variables
+
+ENV LD_LIBRARY_PATH=/HDF_Group/HDF5/1.14.6/lib
 WORKDIR /
-
-
-
-
