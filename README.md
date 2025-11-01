@@ -35,23 +35,23 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.7
   - TensorFlow 2.18
 
-* ost_tf_2.19_torch_2.7.1 (CPU only; 1.98 GB)
+* ost_tf_2.20_torch_2.9 (CPU only; 1.97 GB)
 
   - openSUSE Tumbleweed
-  - gcc 15.2.0
-  - Python 3.12.11
-  - HDF5 1.14.6/h5py 3.14.0
-  - Torch 2.7.1
-  - TensorFlow 2.19
+  - gcc 15.2.1
+  - Python 3.12.12
+  - HDF5 1.14.6/h5py 3.15.1
+  - Torch 2.9.0
+  - TensorFlow 2.20
 
-* arch (CPU only; 2.89 GB)
+* arch (CPU only; 2.47 GB)
 
   - Built on archlinux:latest
   - gcc 15.2.1
   - Python 3.13.7
-  - HDF5 1.14.6/h5py 3.14.0
-  - Torch 2.8.0
-  - TensorFlow 2.19
+  - HDF5 1.14.6/h5py 3.15.1
+  - Torch 2.9.0
+  - TensorFlow 2.20
 
 Discussion
 ----------
@@ -111,4 +111,13 @@ Older images
   - CUDA 12.6.3
   - Torch 2.7
   - TensorFlow 2.18.0
+
+* ost_tf_2.19_torch_2.7.1 (CPU only; 1.98 GB)
+
+  - openSUSE Tumbleweed
+  - gcc 15.2.0
+  - Python 3.12.11
+  - HDF5 1.14.6/h5py 3.14.0
+  - Torch 2.7.1
+  - TensorFlow 2.19
 
