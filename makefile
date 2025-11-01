@@ -60,7 +60,7 @@ $(1).check:
 	sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		| tee $(1).check &
+		| tee $(1).cout &
 
 $(1).run:
 	sudo docker run --gpus all -it --rm \

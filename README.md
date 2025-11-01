@@ -7,15 +7,15 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u24.04_tf_2.18_torch_2.7 (CPU only; 1.41 GB)
+* u24.04_tf_2.20_torch_2.9 (CPU only; 1.45 GB)
 
   - Ubuntu 24.04
   - gcc 13.3.0
   - Python 3.12.3
-  - HDF5 1.14.6/h5py 3.13.0
-  - numpy 2.0.2
-  - Torch 2.7
-  - TensorFlow 2.18
+  - HDF5 1.14.6/h5py 3.15.1
+  - numpy 2.3.4
+  - Torch 2.9
+  - TensorFlow 2.20
 
 * cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.41GB)
 
@@ -89,4 +89,17 @@ GPUs and CUDA
   installation involves manually installing all the PyTorch
   dependencies except for the CUDA dependencies already included in
   the CUDA image.
+
+Older images
+------------
+
+* u24.04_tf_2.18_torch_2.7 (CPU only; 1.41 GB)
+
+  - Ubuntu 24.04
+  - gcc 13.3.0
+  - Python 3.12.3
+  - HDF5 1.14.6/h5py 3.13.0
+  - numpy 2.0.2
+  - Torch 2.7
+  - TensorFlow 2.18
 
