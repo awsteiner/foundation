@@ -17,14 +17,14 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9
   - TensorFlow 2.20
 
-* cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.41GB)
+* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 10.39GB)
 
   - Ubuntu 22.04
-  - Python 3.11.12
+  - Python 3.11.14
   - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 12.6.3
-  - Torch 2.7
-  - TensorFlow 2.18.0
+  - CUDA 12.8.1
+  - Torch 2.9
+  - TensorFlow 2.20.0
 
 * cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.89GB)
 
@@ -75,13 +75,13 @@ GPUs and CUDA
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
   image, which gives slightly smaller images than Method 2. For the
   base image, I'm using the "devel" rather than the "runtime" tag
-  because the former includes nvcc. (The base image is already 6.92
-  GB.) The downsides are:
+  because the former includes nvcc. (The base image is already quite
+  large.) The downsides are:
 
   - They're only available for Ubuntu 22.04. I don't think
-    PyTorch/CUDA/Ubuntu 24.04 images are available yet. This requires
-    one to rebuild HDF5 from source to create the image (since HDF5
-    1.14.6 releases are not pre-built for Ubuntu 22.04).
+    PyTorch/CUDA/Ubuntu 24.04 images are available yet. This method
+    requires one to rebuild HDF5 from source to create the image
+    (since HDF5 1.14.6 releases are not pre-built for Ubuntu 22.04).
   - Since conda is used in the base image, Users of this image are
     additionally subject to the conda licensing requirements.
 
@@ -102,4 +102,13 @@ Older images
   - numpy 2.0.2
   - Torch 2.7
   - TensorFlow 2.18
+
+* cuda_12.6_tf_2.18_torch_2.7_m1 (method 1; 8.41GB)
+
+  - Ubuntu 22.04
+  - Python 3.11.12
+  - HDF5 1.14.6/h5py 3.13.0
+  - CUDA 12.6.3
+  - Torch 2.7
+  - TensorFlow 2.18.0
 
