@@ -26,14 +26,14 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9
   - TensorFlow 2.20.0
 
-* cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.89GB)
+* cuda_13.0_tf_2.20_torch_2.9_m2 (method 2; 7.84GB)
 
   - Ubuntu 24.04
   - Python 3.12.3
   - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 12.8.1
-  - Torch 2.7
-  - TensorFlow 2.18
+  - CUDA 13.0
+  - Torch 2.9
+  - TensorFlow 2.20
 
 * ost_tf_2.20_torch_2.9 (CPU only; 1.97 GB)
 
@@ -73,10 +73,9 @@ GPUs and CUDA
   be a way to optimize these images to make them smaller.
 
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
-  image, which gives slightly smaller images than Method 2. For the
-  base image, I'm using the "devel" rather than the "runtime" tag
-  because the former includes nvcc. (The base image is already quite
-  large.) The downsides are:
+  image. For the base image, I'm using the "devel" rather than the
+  "runtime" tag, because the former includes nvcc. (The base image is
+  already quite large.) The downsides are:
 
   - They're only available for Ubuntu 22.04. I don't think
     PyTorch/CUDA/Ubuntu 24.04 images are available yet. This method
@@ -84,11 +83,15 @@ GPUs and CUDA
     (since HDF5 1.14.6 releases are not pre-built for Ubuntu 22.04).
   - Since conda is used in the base image, Users of this image are
     additionally subject to the conda licensing requirements.
+  - The base PyTorch image has increased in size considerably
+    with recent versions of CUDA (I don't understand this yet).
 
 * Method 2 is built on a CUDA image instead. Then, PyTorch
   installation involves manually installing all the PyTorch
   dependencies except for the CUDA dependencies already included in
   the CUDA image.
+
+* Recent base im
 
 Older images
 ------------
@@ -111,6 +114,15 @@ Older images
   - CUDA 12.6.3
   - Torch 2.7
   - TensorFlow 2.18.0
+
+* cuda_12.8_tf_2.18_torch_2.7_m2 (method 2; 9.89GB)
+
+  - Ubuntu 24.04
+  - Python 3.12.3
+  - HDF5 1.14.6/h5py 3.13.0
+  - CUDA 12.8.1
+  - Torch 2.7
+  - TensorFlow 2.18
 
 * ost_tf_2.19_torch_2.7.1 (CPU only; 1.98 GB)
 

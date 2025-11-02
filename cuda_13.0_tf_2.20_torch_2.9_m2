@@ -47,13 +47,19 @@ RUN pip3 install --break-system-packages \
   triton==3.5.0 \
   typing-extensions==4.15.0 \
   nvidia-cusparselt-cu12==0.7.1
-ARG TORCH_VERSION="torch==2.7.0"
-ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
+ARG TORCH_VERSION="torch==2.9.0"
+ARG TORCH_URL="https://download.pytorch.org/whl/cu130"
 RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
 # If desired, output pip requirements file here
 #FROM working
+
+# ───────────────────────────────────────────────────────────────────
+# Additional nvidia library required
+
+RUN apt install -y nvshmem-cuda-13
+
 
 # ───────────────────────────────────────────────────────────────────
 # Copy the test script, set permissions and environment variables

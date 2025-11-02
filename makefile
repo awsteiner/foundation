@@ -44,14 +44,14 @@ DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.20_torch_2.9 arch \
 
 define RULE_tlate
 $(1).nc:
-	sudo docker buildx build . \
+	sudo docker buildx build . --progress=plain \
 		-f $$(word $(2), $(DFILE)) \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		--no-cache \
 		--target working | tee $(1).out 2>&1 &
 
 $(1).build:
-	sudo docker buildx build . \
+	sudo docker buildx build . --progress=plain \
 		-f $$(word $(2), $(DFILE)) \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		--target working | tee $(1).out 2>&1 &
@@ -68,6 +68,10 @@ $(1).run:
 
 $(1).push:
 	sudo docker push \
+		awsteiner/foundation:$$(word $(2), $(DFILE))
+
+$(1).pull:
+	sudo docker pull \
 		awsteiner/foundation:$$(word $(2), $(DFILE))
 
 endef
