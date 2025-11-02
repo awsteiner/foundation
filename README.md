@@ -91,8 +91,6 @@ GPUs and CUDA
   dependencies except for the CUDA dependencies already included in
   the CUDA image.
 
-* Recent base im
-
 Older images
 ------------
 
