@@ -45,23 +45,23 @@ DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.20_torch_2.9 arch \
 
 define RULE_tlate
 $(1).nc:
-	sudo docker buildx build . --progress=plain \
+	( sudo docker buildx build . --progress=plain \
 		-f $$(word $(2), $(DFILE)) \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		--no-cache \
-		--target working | tee $(1).out 2>&1 &
+		--target working | tee $(1).out 2>&1 ) &
 
 $(1).build:
-	sudo docker buildx build . --progress=plain \
+	( sudo docker buildx build . --progress=plain \
 		-f $$(word $(2), $(DFILE)) \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
-		--target working | tee $(1).out 2>&1 &
+		--target working | tee $(1).out 2>&1 ) &
 
 $(1).check:
-	sudo docker run --gpus all --rm \
+	( sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
 		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
-		| tee $(1).cout &
+		| tee $(1).cout ) &
 
 $(1).run:
 	sudo docker run --gpus all -it --rm \
