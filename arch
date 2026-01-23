@@ -11,10 +11,14 @@ LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 RUN pacman -Sy --noconfirm base-devel gcc git curl \
     hdf5 python python-numpy python-pip python-tensorflow \
-    python-pytorch
+    python-pytorch 
 
 RUN pacman -Scc --noconfirm
 
+# AWS 1/23/26: Update a few packages because of security vulnerabilities
+RUN pip install --break-system-packages jaraco-context==6.1.0 \
+  keras==3.13.1 pyasn1==0.6.2 \
+  werkzeug==3.1.5 wheel==0.46.2 pip-audit==2.10.0
 RUN pip list
 
 # ───────────────────────────────────────────────────────────────────

@@ -11,6 +11,8 @@ echo ""
 echo "Python version:"
 python3 --version
 echo ""
+echo "pip_audit:"
+pip-audit
 echo ""
 echo "HDF5 version:"
 python3 -c "import h5py; print(h5py.__version__); print(h5py.version.hdf5_version)"

@@ -8,6 +8,9 @@ echo ""
 echo "Python version:"
 python3 --version
 echo ""
+echo "pip_audit:"
+pip-audit
+echo ""
 echo "Output of 'nvidia-smi':"
 nvidia-smi
 echo ""

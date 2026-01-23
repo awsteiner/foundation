@@ -12,8 +12,8 @@ RUN pip install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
 # Tensorflow doesn't yet support python3.13 which is available on
-# OpenSuse tumbleweed
-RUN pip install --break-system-packages tensorflow==2.20.0
+# OpenSuse tumbleweed. We also include pip-audit for security.
+RUN pip install --break-system-packages tensorflow==2.20.0 pip-audit==2.10.0
 
 # ───────────────────────────────────────────────────────────────────
 # The opensuse python312 package doesn't make a python3 executable,

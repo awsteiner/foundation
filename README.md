@@ -7,43 +7,45 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u24.04_tf_2.20_torch_2.9 (CPU only; 1.45 GB)
+* u24.04_tf_2.20_torch_2.9 (CPU only; 1.49 GB)
 
   - Ubuntu 24.04
   - gcc 13.3.0
   - Python 3.12.3
   - HDF5 1.14.6/h5py 3.15.1
   - numpy 2.3.4
-  - Torch 2.9
-  - TensorFlow 2.20
+  - Torch 2.9.0
+  - TensorFlow 2.20.0
 
-* u25.04_tf_2.20_torch_2.9 (CPU only; 1.44 GB)
+* u25.04_tf_2.20_torch_2.9 (CPU only; 1.48 GB)
 
   - Ubuntu 25.04
   - gcc 14.2.0
   - Python 3.13.3
   - HDF5 1.14.6/h5py 3.15.1
   - numpy 2.3.4
-  - Torch 2.9
-  - TensorFlow 2.20
-
-* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 10.39GB)
-
-  - Ubuntu 22.04
-  - Python 3.11.14
-  - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 12.8.1
-  - Torch 2.9
+  - Torch 2.9.0
   - TensorFlow 2.20.0
 
-* cuda_13.0_tf_2.20_torch_2.9_m2 (method 2; 7.84GB)
+* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 10.4GB)
+
+  - Ubuntu 22.04
+  - gcc 11.4.0
+  - Python 3.11.14
+  - HDF5 1.14.6/h5py 3.13.0
+  - CUDA 12.8
+  - Torch 2.9.0
+  - TensorFlow 2.20.0 (uses CUDA 12.5.1)
+
+* cuda_13.0_tf_2.20_torch_2.9_m2 (method 2; 7.81GB)
 
   - Ubuntu 24.04
+  - gcc 13.3.0
   - Python 3.12.3
   - HDF5 1.14.6/h5py 3.13.0
   - CUDA 13.0
-  - Torch 2.9
-  - TensorFlow 2.20
+  - Torch 2.9.0
+  - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
 * ost_tf_2.20_torch_2.9 (CPU only; 1.97 GB)
 
@@ -69,6 +71,9 @@ Discussion
 * TensorFlow is built with a particular HDF5 version, so we install
   the matching version and ensure h5py uses it. This helps with HDF5
   compatibility issues when constructing code with uses HDF5.
+
+* The ``pip-audit`` Python package is used to help avoid security
+  vulnerabilities and included with the images.
 
 * The images include two scripts, tf_check.sh and torch_check.sh which
   are used to verify that TensorFlow, Torch, and/or nvcc work as expected.
