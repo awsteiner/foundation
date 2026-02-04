@@ -94,17 +94,7 @@ GPUs and CUDA
 
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
   image. For the base image, I'm using the "devel" rather than the
-  "runtime" tag, because the former includes nvcc. (The base image is
-  already quite large.) The downsides are:
-
-  - They're only available for Ubuntu 22.04. I don't think
-    PyTorch/CUDA/Ubuntu 24.04 images are available yet. This method
-    requires one to rebuild HDF5 from source to create the image
-    (since HDF5 1.14.6 releases are not pre-built for Ubuntu 22.04).
-  - Since conda is used in the base image, Users of this image are
-    additionally subject to the conda licensing requirements.
-  - The base PyTorch image has increased in size considerably
-    with recent versions of CUDA (I don't understand this yet).
+  "runtime" tag, because the former includes nvcc.
 
 * Method 2 is built on a CUDA image instead. Then, PyTorch
   installation involves manually installing all the PyTorch
