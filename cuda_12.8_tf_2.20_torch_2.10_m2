@@ -1,0 +1,84 @@
+ARG BASE=nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
+FROM ${BASE} AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
+
+# ───────────────────────────────────────────────────────────────────
+# To fix tzdata asking for a timezone during installation
+# can set up later using sudo dpkg-reconfigure tzdata I think.
+
+ARG DEBIAN_FRONTEND=noninteractive
+# Alternatively, ENV DEBIAN_FRONTEND noninteractive
+
+# ───────────────────────────────────────────────────────────────────
+# Install Python, pip, and curl
+
+RUN apt-get -y update && apt-get -y install \
+  python3 python3-pip curl && apt-get clean 
+
+ENV PATH="/root/.local/bin:$PATH"
+
+RUN python3 -m pip install --break-system-packages --user --upgrade \
+  pip wheel
+
+# ───────────────────────────────────────────────────────────────────
+# Install HDF5
+
+WORKDIR /opt
+RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6-ubuntu-2404_gcc.deb" -o hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN dpkg -i hdf5-1.14.6-ubuntu-2404_gcc.deb
+
+# ───────────────────────────────────────────────────────────────────
+# Ensure h5py uses the installed version of HDF5
+
+RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
+  --no-binary=h5py h5py==3.13.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install TensorFlow and Torch
+
+# Note that Tensorflow and Torch both include their own cuda libraries
+# which are separate from the base image.
+# (needs to be keras>=3.12 for security)
+
+ARG TF_VERSION=tensorflow==2.20.0
+RUN pip3 install --break-system-packages keras==3.13.2 ${TF_VERSION}
+RUN pip3 install --break-system-packages \
+  filelock==3.20.3 \
+  fsspec==2025.10.0 \
+  jinja2==3.1.6 \
+  networkx==3.5 \
+  pillow==12.1.1 \
+  pip_audit==2.10.0 \
+  protobuf==6.33.5 \
+  setuptools==80.9.0 \
+  sympy==1.14.0 \
+  triton==3.5.0 \
+  typing-extensions==4.15.0 \
+  nvidia-cusparselt-cu12==0.7.1 \
+  werkzeug==3.1.6
+ARG TORCH_VERSION="torch==2.10.0"
+ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
+RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
+  --index-url ${TORCH_URL}
+
+# If desired, output pip requirements file here
+#FROM working
+
+# ───────────────────────────────────────────────────────────────────
+# Additional nvidia library required
+
+RUN apt install -y nvshmem-cuda-13
+
+# ───────────────────────────────────────────────────────────────────
+# Copy the test script, set permissions and environment variables
+
+WORKDIR /opt
+COPY tf_check.sh ./
+COPY torch_check.sh ./
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/lib/python3.12/dist-packages/nvidia/cusparselt/lib:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
+RUN chmod 777 tf_check.sh torch_check.sh
+WORKDIR /
+
+
+
+
