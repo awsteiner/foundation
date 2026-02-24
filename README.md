@@ -92,6 +92,9 @@ GPUs and CUDA
 * CUDA and GPU support is what leads to large image sizes. There may
   be a way to optimize these images to make them smaller.
 
+* 2/24/26: Note that there is currently no official TensorFlow release
+  that supports CUDA 13.0 out-of-the-box.
+
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
   image. For the base image, I'm using the "devel" rather than the
   "runtime" tag, because the former includes nvcc.
