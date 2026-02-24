@@ -62,6 +62,12 @@ RUN pip3 install --break-system-packages \
   werkzeug==3.1.6
 ARG TORCH_VERSION="torch==2.9"
 ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
+
+# 2/24/26: We install torch without dependencies which are already mostly
+# included in the CUDA image. This keeps most of the functionality
+# but saves about 4 GB in image size. However, this also requires we
+# manually install and take care of some of the dependencies below.
+
 RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
@@ -69,7 +75,7 @@ RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
 #FROM working
 
 # ───────────────────────────────────────────────────────────────────
-# Additional nvidia library required
+# Additional nvidia libraries required
 
 RUN apt remove -y --allow-change-held-packages libnccl-dev
 RUN apt install -y --allow-change-held-packages nvshmem-cuda-12 libnccl2
