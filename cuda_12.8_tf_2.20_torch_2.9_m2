@@ -18,7 +18,7 @@ RUN apt-get -y update && apt-get -y install \
 # ───────────────────────────────────────────────────────────────────
 # 2/24/26: We do a user installation of pip to ignore system pip which
 # is rejected by pip-audit. This should be revisited down the road in
-# case ubuntu updates their system pip.
+# case Ubuntu updates their system pip.
 
 ENV PATH="/root/.local/bin:$PATH"
 RUN python3 -m pip install --break-system-packages --user --upgrade \
@@ -40,9 +40,12 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 # ───────────────────────────────────────────────────────────────────
 # Install TensorFlow and Torch
 
-# Note that Tensorflow and Torch both include their own cuda libraries
-# which are separate from the base image.
-# (needs to be keras>=3.12 for security)
+# Tensorflow includes CUDA 12.5.1, and we install the Torch
+# dependencies separately. We explicitly specify some version numbers
+# to use versions without security problems. TF announces that "This
+# TensorFlow binary is optimized to use available CPU instructions in
+# performance-critical operations.", but this doesn't mean that GPU
+# support is not included.
 
 ARG TF_VERSION=tensorflow==2.20.0
 RUN pip3 install --break-system-packages keras==3.13.2 ${TF_VERSION}
@@ -65,7 +68,7 @@ ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
 
 # 2/24/26: We install torch without dependencies which are already mostly
 # included in the CUDA image. This keeps most of the functionality
-# but saves about 4 GB in image size. However, this also requires we
+# but saves about 2 GB in image size. However, this also requires we
 # manually install and take care of some of the dependencies below.
 
 RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \

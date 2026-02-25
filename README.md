@@ -27,7 +27,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.1
   - TensorFlow 2.20.0
 
-* cuda_13.0_tf_2.20_torch_2.10_m1 (method 1; 7.95GB)
+* cuda_12.8_tf_2.20_torch_2.10_m1 (method 1; 7.95GB - in progress)
 
   - Ubuntu 24.04
   - gcc 13.3.0
@@ -37,13 +37,13 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.10.0
   - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
-* cuda_13.0_tf_2.20_torch_2.9_m2 (method 2; 7.82GB)
+* cuda_12.8_tf_2.20_torch_2.9_m2 (method 2; 10.15GB)
 
   - Ubuntu 24.04
   - gcc 13.3.0
   - Python 3.12.3
   - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 13.0.1
+  - CUDA 12.8.1
   - Torch 2.9.0
   - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
