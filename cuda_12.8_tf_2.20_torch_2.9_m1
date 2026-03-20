@@ -1,4 +1,4 @@
-ARG BASE=pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
+ARG BASE=pytorch/pytorch:2.9.0-cuda12.8-cudnn9-devel
 FROM ${BASE} AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
@@ -46,6 +46,7 @@ RUN pip3 install --break-system-packages \
   ml-dtypes==0.5.3 \
   numpy==2.3.4 \
   opt-einsum==3.4.0 \
+  pip_audit==2.10.0 \
   protobuf==6.33.0 \
   six==1.17.0 \
   tensorboard==2.20.0 \
