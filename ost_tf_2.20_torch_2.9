@@ -4,23 +4,16 @@ LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 # Install system dependencies
 RUN zypper --non-interactive install \
   --no-recommends ccache gawk gcc-c++ hdf5-devel \
-  make python312 git python312-pip 
+  make python3 git python3-pip 
 
 ARG TORCH_VERSION="torch==2.9.0"
 ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN pip install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
-# Tensorflow doesn't yet support python3.13 which is available on
-# OpenSuse tumbleweed. We also include pip-audit for security.
+# We include pip-audit for security.
 RUN pip install --break-system-packages setuptools==78.1.1 \
   filelock==3.20.3 tensorflow==2.20.0 pip-audit==2.10.0 pip==26.0
-
-# ───────────────────────────────────────────────────────────────────
-# The opensuse python312 package doesn't make a python3 executable,
-# so we just make a symlink
-
-RUN ln -s /usr/bin/python3.12 /usr/bin/python3
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for
