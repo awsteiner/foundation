@@ -9,6 +9,15 @@ RUN apt-get -y update && apt-get -y install \
   python3 python3-pip curl && apt-get clean 
 
 # ───────────────────────────────────────────────────────────────────
+# 2/24/26: We do a user installation of pip to ignore system pip which
+# is rejected by pip-audit. This should be revisited down the road in
+# case Ubuntu updates their system pip.
+
+ENV PATH="/root/.local/bin:$PATH"
+RUN python3 -m pip install --break-system-packages --user --upgrade \
+  pip wheel
+
+# ───────────────────────────────────────────────────────────────────
 # Install HDF5
 
 WORKDIR /opt
@@ -37,22 +46,28 @@ RUN HDF5_DIR=/usr/local/hdf5 pip3 install --break-system-packages \
 RUN pip3 install --break-system-packages \
   absl-py==2.3.1 \
   astunparse==1.6.3 \
+  brotli==1.2.0 \
+  filelock==3.20.3 \
   flatbuffers==25.9.23 \
   gast==0.6.0 \
   google-pasta==0.2.0 \
   grpcio==1.76.0 \
-  keras==3.12 \ 
+  h2==4.3.0 \
+  keras==3.13.2 \ 
   libclang==18.1.1 \
+  lief==0.17.2 \
   ml-dtypes==0.5.3 \
   numpy==2.3.4 \
   opt-einsum==3.4.0 \
   pip_audit==2.10.0 \
-  protobuf==6.33.0 \
+  pillow==12.1.1 \
+  protobuf==6.33.5 \
   six==1.17.0 \
   tensorboard==2.20.0 \
   termcolor==3.2.0 \
+  uv==0.9.6 \
   wrapt==2.0.0 \
-  Werkzeug==3.1.5 \
+  Werkzeug==3.1.6 \
   urllib3==2.6.3
 
 RUN pip3 install --break-system-packages tensorflow==2.20.0
