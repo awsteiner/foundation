@@ -27,7 +27,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.1
   - TensorFlow 2.20.0
 
-* cuda_12.8_tf_2.20_torch_2.10_m1 (method 1; 7.95GB - in progress)
+* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 7.95GB - in progress)
 
   - Ubuntu 24.04
   - gcc 13.3.0
@@ -47,16 +47,16 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.0
   - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
-* ost_tf_2.20_torch_2.9 (CPU only; 1.99 GB)
+* ost_tf_2.20_torch_2.9 (CPU only; 2.06 GB)
 
   - openSUSE Tumbleweed
   - gcc 15.2.1
-  - Python 3.12.12
+  - Python 3.13.12
   - HDF5 1.14.6/h5py 3.15.1
   - Torch 2.9.0
   - TensorFlow 2.20
 
-* arch (CPU only; 2.52 GB)
+* arch (CPU only; 2.48 GB)
 
   - Built on archlinux:latest
   - gcc 15.2.1
@@ -97,7 +97,7 @@ GPUs and CUDA
 
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
   image. For the base image, I'm using the "devel" rather than the
-  "runtime" tag, because the former includes nvcc.
+  "runtime" tag, because the former includes nvcc. (Not currently working.)
 
 * Method 2 is built on a CUDA image instead. Then, PyTorch
   installation involves manually installing all the PyTorch

@@ -24,15 +24,14 @@ RUN rm -f hdf5-1.14.6-ubuntu-2404_gcc.deb
 # ───────────────────────────────────────────────────────────────────
 # Ensure h5py uses the installed version of HDF5
 
-RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
-  --no-binary=h5py h5py==3.13.0
+RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install \
+  --break-system-packages --no-binary=h5py h5py==3.13.0
 
 # ───────────────────────────────────────────────────────────────────
 # Install TensorFlow and Torch
 
 # Note that Tensorflow and Torch both include their own cuda libraries
 # which are separate from the base image.
-# (needs to be keras>=3.12 for security)
 
 RUN pip3 install --break-system-packages \
 absl-py==2.3.1 \
@@ -102,7 +101,8 @@ COPY torch_check.sh ./
 RUN chmod 777 tf_check.sh torch_check.sh
 
 # ───────────────────────────────────────────────────────────────────
-# Set environment variables
+# Set environment variables and final working directory
 
 ENV LD_LIBRARY_PATH=/HDF_Group/HDF5/1.14.6/lib
-WORKDIR /
+
+WORKDIR /root
