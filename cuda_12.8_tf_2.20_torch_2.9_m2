@@ -58,6 +58,7 @@ RUN pip3 install --break-system-packages \
   pillow==12.1.1 \
   pip_audit==2.10.0 \
   protobuf==6.33.5 \
+  pygments==2.20.0 \
   requests==2.33.0 \
   setuptools==80.9.0 \
   sympy==1.14.0 \
