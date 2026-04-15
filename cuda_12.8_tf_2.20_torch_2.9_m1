@@ -60,7 +60,7 @@ RUN pip3 install --break-system-packages \
   numpy==2.3.4 \
   opt-einsum==3.4.0 \
   pip_audit==2.10.0 \
-  pillow==12.1.1 \
+  pillow==12.2.0 \
   protobuf==6.33.5 \
   six==1.17.0 \
   tensorboard==2.20.0 \
