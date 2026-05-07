@@ -52,7 +52,7 @@ NICKS := ubuntu opensuse arch m1 m2 u25 u26
 # Dockerfiles
 DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.20_torch_2.9 arch \
 	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.20_torch_2.9_m2 \
-	u25.04_tf_2.20_torch_2.9 u26.04_tf_2.20_torch_2.9
+	u25.04_tf_2.20_torch_2.9 u26.04_tf_2.21_torch_2.11
 
 define RULE_tlate
 $(1).nc:

@@ -17,15 +17,15 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.1
   - TensorFlow 2.20.0
 
-* u25.04_tf_2.20_torch_2.9 (CPU only; 1.49 GB)
+* u26.04_tf_2.21_torch_2.11 (CPU only; 1.48 GB)
 
-  - Ubuntu 25.04
-  - gcc 14.2.0
-  - Python 3.13.3
-  - HDF5 1.14.6/h5py 3.15.1
+  - Ubuntu 26.04
+  - gcc 15.2.0
+  - Python 3.13.13
+  - HDF5 1.14.6/h5py 3.14.0
   - numpy 2.3.4
-  - Torch 2.9.1
-  - TensorFlow 2.20.0
+  - Torch 2.11.0
+  - TensorFlow 2.21.0
 
 * cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 7.95GB - in progress)
 
@@ -78,10 +78,15 @@ Discussion
 * The images include two scripts, tf_check.sh and torch_check.sh which
   are used to verify that TensorFlow, Torch, and/or nvcc work as expected.
 
-* 2/2/26: Warning: the current Ubuntu-based images (including those
+* 2/2/26: Warning: the images based on Ubuntu 24.04 (including those
   with CUDA) use user installations of pip and wheel to ensure that
   more recent versions of these packages are used which don't have
-  security vulnerabilities as reported by pip-audit. 
+  security vulnerabilities as reported by pip-audit.
+
+* 5/7/26: Note that Tensorflow does not yet support Python 3.14, and
+  Ubuntu 26.04 does not have an official Python 3.13 package, so the
+  Ubuntu 26.04 image uses the DeadSnakes PPA to install Python3.13 in
+  a virtual environment.
 
 GPUs and CUDA
 -------------
