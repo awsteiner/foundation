@@ -90,11 +90,11 @@ RUN apt install -y --allow-change-held-packages nvshmem-cuda-12 libnccl2
 # Copy the test script, set permissions and environment variables
 
 WORKDIR /opt
-COPY tf_check.sh ./
-COPY torch_check.sh ./
+COPY cuda_check.sh ./
+RUN chmod 777 cuda_check.sh
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib/python3.12/dist-packages/nvidia/cusparselt/lib:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
-RUN chmod 777 tf_check.sh torch_check.sh
-WORKDIR /
+
+WORKDIR /root
 
 
 

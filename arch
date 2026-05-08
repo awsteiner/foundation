@@ -27,7 +27,7 @@ RUN pip list
 # reporting version information)
 
 WORKDIR /opt
-COPY tf_check.sh ./
-COPY torch_check.sh ./
-RUN chmod 777 tf_check.sh torch_check.sh
+COPY nocuda_check.sh ./
+RUN chmod 777 nocuda_check.sh
 
+WORKDIR /root
