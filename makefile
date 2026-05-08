@@ -72,7 +72,13 @@ $(1).build:
 $(1).check:
 	( sudo docker run --gpus all --rm \
 		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
-		sh -c "cd /opt; ./tf_check.sh; ./torch_check.sh" \
+		sh -c "cd /opt; ./nocuda_check.sh" \
+		| tee $(1).cout ) &
+
+$(1).ccheck:
+	( sudo docker run --gpus all --rm \
+		-t awsteiner/foundation:$$(word $(2), $(DFILE)) \
+		sh -c "cd /opt; ./cuda_check.sh" \
 		| tee $(1).cout ) &
 
 $(1).run:

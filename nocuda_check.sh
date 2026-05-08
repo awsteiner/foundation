@@ -5,13 +5,13 @@ echo ""
 echo -n "TensorFlow import: "
 python3 -c "import tensorflow; tf=open('tfv.txt','w'); tf.write(tensorflow.__version__); tf.close()"
 echo ""
-grep DESCRIPTION /etc/lsb-release | cut -c22-40
+grep PRETTY_NAME /etc/os-release | cut -c13-40 | tr -d '"'
 echo -n "PATH "
 echo $PATH
 echo -n "LD_LIBRARY_PATH "
 echo $LD_LIBRARY_PATH
 echo -n "gcc "
-gcc --version | head -n 1 | awk '{print $3}'
+gcc --version | head -n 1 | awk '{print $3}' | tr -d ')'
 echo -n "Python "
 python3 --version | awk '{print $2}'
 echo -n "numpy "
