@@ -96,9 +96,8 @@ RUN pip3 install --break-system-packages ${TORCH_VERSION} \
 # reporting version information)
 
 WORKDIR /opt
-COPY tf_check.sh ./
-COPY torch_check.sh ./
-RUN chmod 777 tf_check.sh torch_check.sh
+COPY nocuda_check.sh ./
+RUN chmod 777 nocuda_check.sh
 
 # ───────────────────────────────────────────────────────────────────
 # Set environment variables and final working directory

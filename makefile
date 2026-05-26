@@ -8,7 +8,6 @@ help:
 	@echo "arch      Arch Linux"
 	@echo "m1        Ubuntu 24.04; GPU method 1"
 	@echo "m2        Ubuntu 24.04; GPU method 2"
-	@echo "u25       Ubuntu 25.04"
 	@echo "u26       Ubuntu 26.04"
 	@echo ""
 	@echo "Actions:"
@@ -48,12 +47,11 @@ docker_clean2:
 # ----------------------------------------------------------------------
 
 # Nicknames
-NICKS := ubuntu opensuse arch m1 m2 u25 u26 c13m2
+NICKS := ubuntu opensuse arch m1 m2 u26 c13m2
 # Dockerfiles
 DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.20_torch_2.9 arch \
 	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.20_torch_2.9_m2 \
-	u25.04_tf_2.20_torch_2.9 u26.04_tf_2.21_torch_2.11 \
-	cuda_13.0_tf_2.20_torch_2.9_m2
+	u26.04_tf_2.21_torch_2.11 cuda_13.0_tf_2.20_torch_2.9_m2
 
 define RULE_tlate
 $(1).nc:
