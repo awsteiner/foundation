@@ -29,3 +29,4 @@ echo -n "Torch "
 python3 -c "import torch; print(torch.__version__); "
 echo -n "TensorFlow "
 cat tfv.txt
+echo ""
