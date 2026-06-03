@@ -3,12 +3,12 @@ help:
 	@echo ""
 	@echo "Nicknames:"
 	@echo "---------------------------------------------------------------"
-	@echo "ubuntu    Ubuntu 24.04; no GPU support"
+	@echo "ubuntu    Ubuntu 26.04; no GPU support"
 	@echo "opensuse  openSUSE Tumbleweed"
 	@echo "arch      Arch Linux"
 	@echo "m1        Ubuntu 24.04; GPU method 1"
 	@echo "m2        Ubuntu 24.04; GPU method 2"
-	@echo "u26       Ubuntu 26.04"
+	@echo "u24       Ubuntu 24.04"
 	@echo ""
 	@echo "Actions:"
 	@echo "---------------------------------------------------------------"
@@ -47,9 +47,9 @@ docker_clean2:
 # ----------------------------------------------------------------------
 
 # Nicknames
-NICKS := ubuntu opensuse arch m1 m2 u26 c13m2
+NICKS := u24 opensuse arch m1 m2 ubuntu c13m2
 # Dockerfiles
-DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.20_torch_2.9 arch \
+DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.21_torch_2.11 arch \
 	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.20_torch_2.9_m2 \
 	u26.04_tf_2.21_torch_2.11 cuda_13.0_tf_2.20_torch_2.9_m2
 

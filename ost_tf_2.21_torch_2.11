@@ -6,6 +6,11 @@ RUN zypper --non-interactive install \
   --no-recommends ccache gawk gcc-c++ hdf5-devel \
   make python3 git python3-pip python3-devel
 
+ENV PATH="/root/.local/bin:$PATH"
+
+RUN python3 -m pip install --break-system-packages --user --upgrade \
+  pip wheel
+
 # ───────────────────────────────────────────────────────────────────
 # Install HDF5
 
@@ -22,7 +27,7 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 
 # ───────────────────────────────────────────────────────────────────
 
-ARG TORCH_VERSION="torch==2.9.0"
+ARG TORCH_VERSION="torch==2.11.0"
 ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN pip install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
@@ -31,14 +36,13 @@ RUN pip install --break-system-packages ${TORCH_VERSION} \
 # We include pip-audit for security.
 
 RUN pip install --break-system-packages setuptools==78.1.1 \
-  filelock==3.20.3 tensorflow==2.20.0 pip-audit==2.10.0 pip==26.0
+  filelock==3.20.3 tensorflow==2.21.0 pip-audit==2.10.0 pip==26.0
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for
 # reporting version information)
 
 WORKDIR /opt
-COPY tf_check.sh ./
-COPY torch_check.sh ./
-RUN chmod 777 tf_check.sh torch_check.sh
+COPY nocuda_check.sh ./
+RUN chmod 777 nocuda_check.sh
 
