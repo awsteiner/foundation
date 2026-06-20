@@ -7,16 +7,6 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u24.04_tf_2.20_torch_2.9 (CPU only; 1.50 GB)
-
-  - Ubuntu 24.04
-  - gcc 13.3.0
-  - Python 3.12.3
-  - HDF5 1.14.6/h5py 3.15.1
-  - numpy 2.3.4
-  - Torch 2.9.1
-  - TensorFlow 2.20.0
-
 * u26.04_tf_2.21_torch_2.11 (CPU only; 1.48 GB)
 
   - Ubuntu 26.04
@@ -47,14 +37,14 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.0
   - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
-* ost_tf_2.20_torch_2.9 (CPU only; 2.06 GB)
+* ost_tf_2.21_torch_2.11 (CPU only; 2.06 GB)
 
   - openSUSE Tumbleweed
   - gcc 15.2.1
-  - Python 3.13.12
-  - HDF5 1.14.6/h5py 3.15.1
-  - Torch 2.9.0
-  - TensorFlow 2.20
+  - Python 3.13.13
+  - HDF5 1.14.6/h5py 3.13.0
+  - Torch 2.11.0
+  - TensorFlow 2.21
 
 * arch (CPU only; 2.48 GB)
 
@@ -112,4 +102,14 @@ GPUs and CUDA
 Older images
 ------------
 
-* No older images are currently supported.
+* u24.04_tf_2.20_torch_2.9 (CPU only; 1.50 GB)
+
+  - Ubuntu 24.04
+  - gcc 13.3.0
+  - Python 3.12.3
+  - HDF5 1.14.6/h5py 3.15.1
+  - numpy 2.3.4
+  - Torch 2.9.1
+  - TensorFlow 2.20.0
+
+* No other older images are currently supported.
