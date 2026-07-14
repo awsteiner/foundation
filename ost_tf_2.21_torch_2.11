@@ -6,9 +6,9 @@ RUN zypper --non-interactive install \
   --no-recommends ccache gawk gcc-c++ hdf5-devel \
   make python3 git python3-pip python3-devel
 
-ENV PATH="/root/.local/bin:$PATH"
-
-RUN python3 -m pip install --break-system-packages --user --upgrade \
+# AWS, 7/14/26: For some reason we have to additionally install a new
+# version of pip below
+RUN python3 -m pip install --break-system-packages --upgrade \
   pip wheel
 
 # ───────────────────────────────────────────────────────────────────
@@ -35,8 +35,9 @@ RUN pip install --break-system-packages ${TORCH_VERSION} \
 # ───────────────────────────────────────────────────────────────────
 # We include pip-audit for security.
 
-RUN pip install --break-system-packages setuptools==78.1.1 \
-  filelock==3.20.3 tensorflow==2.21.0 pip-audit==2.10.0 pip==26.0
+RUN pip install --break-system-packages setuptools==83.0.0 \
+  filelock==3.20.3 tensorflow==2.21.0 pip-audit==2.10.0 \
+  pip==26.1.2
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for

@@ -7,15 +7,7 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u26.04_tf_2.21_torch_2.11 (CPU only; 1.48 GB)
-
-  Note that right now, Ubuntu 26.04 ships with Python 3.14 and
-  TensorFlow 2.21 is only compatible with Python 3.13, so this image
-  currently uses the Deadsnakes PPA to install Python 3.13. Also,
-  Torch 2.11's package requirements require setuptools<82.0, in
-  conflict with PYSEC-2026-3447 which requires setuptools>=83.0.0.
-  This image forces setuptools==83.0.0. Let me know if this causes
-  you issues.
+* u26.04_tf_2.21_torch_2.11 (CPU only; 1.50 GB)
 
   - Ubuntu 26.04
   - gcc 15.2.0
@@ -25,7 +17,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.11.0
   - TensorFlow 2.21.0
 
-* cuda_12.8_tf_2.20_torch_2.9_m2 (method 2; 10.15GB)
+* cuda_12.8_tf_2.20_torch_2.9_m2 (method 2; 10.16 GB)
 
   - Ubuntu 24.04
   - gcc 13.3.0
@@ -35,7 +27,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.9.0
   - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
-* ost_tf_2.21_torch_2.11 (CPU only; 2.06 GB)
+* ost_tf_2.21_torch_2.11 (CPU only; 1.95 GB)
 
   - openSUSE Tumbleweed
   - gcc 15.2.1
@@ -44,14 +36,15 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - Torch 2.11.0
   - TensorFlow 2.21
 
-* arch (CPU only; 2.48 GB)
+* arch (CPU only; 2.82 GB)
 
   - Built on archlinux:latest
-  - gcc 15.2.1
-  - Python 3.14.2
-  - HDF5 2.0.0/h5py 3.15.1
-  - Torch 2.10.0
-  - TensorFlow 2.20
+  - gcc 16.1.1
+  - Python 3.14.6
+  - numpy 2.5.1
+  - HDF5 2.1.1/h5py 3.16.0
+  - Torch 2.13.0
+  - TensorFlow 2.21.0
 
 Discussion
 ----------
@@ -63,8 +56,9 @@ Discussion
 * The ``pip-audit`` Python package is used to help avoid security
   vulnerabilities and included with the images.
 
-* The images include two scripts, tf_check.sh and torch_check.sh which
-  are used to verify that TensorFlow, Torch, and/or nvcc work as expected.
+* The images include one of two scripts, cuda_check.sh and
+  nocuda_check.sh, which are used to verify that pip-audit reports no
+  vulnerabilities and TensorFlow, Torch, and/or nvcc work as expected.
 
 * 2/2/26: Warning: the images based on Ubuntu 24.04 (including those
   with CUDA) use user installations of pip and wheel to ensure that
@@ -75,6 +69,11 @@ Discussion
   Ubuntu 26.04 does not have an official Python 3.13 package, so the
   Ubuntu 26.04 image uses the DeadSnakes PPA to install Python3.13 in
   a virtual environment.
+
+* 7/14/26: Torch 2.11's package requirements require setuptools<82.0,
+  in conflict with PYSEC-2026-3447 which requires setuptools>=83.0.0.
+  This image forces setuptools==83.0.0. Let me know if this causes you
+  issues.
 
 GPUs and CUDA
 -------------
