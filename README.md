@@ -11,7 +11,7 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
 
   - Ubuntu 26.04
   - gcc 15.2.0
-  - Python 3.13.13
+  - Python 3.13.14
   - HDF5 1.14.6/h5py 3.14.0
   - numpy 2.3.4
   - Torch 2.13.0
