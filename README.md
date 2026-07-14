@@ -9,6 +9,14 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
 
 * u26.04_tf_2.21_torch_2.11 (CPU only; 1.48 GB)
 
+  Note that right now, Ubuntu 26.04 ships with Python 3.14 and
+  TensorFlow 2.21 is only compatible with Python 3.13, so this image
+  currently uses the Deadsnakes PPA to install Python 3.13. Also,
+  Torch 2.11's package requirements require setuptools<82.0, in
+  conflict with PYSEC-2026-3447 which requires setuptools>=83.0.0.
+  This image forces setuptools==83.0.0. Let me know if this causes
+  you issues.
+
   - Ubuntu 26.04
   - gcc 15.2.0
   - Python 3.13.13
@@ -16,16 +24,6 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
   - numpy 2.3.4
   - Torch 2.11.0
   - TensorFlow 2.21.0
-
-* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 7.95GB - in progress)
-
-  - Ubuntu 24.04
-  - gcc 13.3.0
-  - Python 3.12.3
-  - HDF5 1.14.6/h5py 3.13.0
-  - CUDA 13.0
-  - Torch 2.10.0
-  - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
 * cuda_12.8_tf_2.20_torch_2.9_m2 (method 2; 10.15GB)
 
@@ -111,5 +109,18 @@ Older images
   - numpy 2.3.4
   - Torch 2.9.1
   - TensorFlow 2.20.0
+
+Experimental images
+-------------------
+
+* cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 7.95GB - in progress)
+
+  - Ubuntu 24.04
+  - gcc 13.3.0
+  - Python 3.12.3
+  - HDF5 1.14.6/h5py 3.13.0
+  - CUDA 13.0
+  - Torch 2.10.0
+  - TensorFlow 2.20.0 (uses CUDA 12.5.1)
 
 * No other older images are currently supported.
