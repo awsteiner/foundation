@@ -110,12 +110,12 @@ wrapt==2.0.0
 ARG TF_VERSION=tensorflow_cpu==2.21.0
 RUN /opt/venv/bin/pip install ${TF_VERSION}
 
-ARG TORCH_VERSION="torch==2.11.0"
+ARG TORCH_VERSION="torch==2.13.0"
 ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN /opt/venv/bin/pip install ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
 
-RUN /opt/venv/bin/pip install setuptools==83.0.0
+#RUN /opt/venv/bin/pip install setuptools==83.0.0
 
 # If desired, output pip requirements file here
 #FROM working
