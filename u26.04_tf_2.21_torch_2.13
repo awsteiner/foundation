@@ -57,7 +57,7 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 /opt/venv/bin/pip install \
 
 # Note that Tensorflow and Torch both include their own cuda libraries
 # which are separate from the base image.
-# (needs to be keras>=3.12 for security)
+# (needs to be keras>=3.15 for security)
 
 RUN /opt/venv/bin/pip install \
 absl-py==2.3.1 \
@@ -74,7 +74,7 @@ h5py==3.15.1 \
 idna==3.15 \
 joblib==1.5.2 \
 Jinja2==3.1.6 \
-keras==3.14.0 \
+keras==3.15.0 \
 libclang==18.1.1 \
 Markdown==3.9 \
 markdown-it-py==4.0.0 \
