@@ -7,15 +7,15 @@ at
 https://hub.docker.com/repository/docker/awsteiner/foundation/general
 .
 
-* u26.04_tf_2.21_torch_2.13 (CPU only; 1.50 GB)
+* u26.04_tf_2.22_torch_2.14 (CPU only; 1.50 GB)
 
   - Ubuntu 26.04
   - gcc 15.2.0
-  - Python 3.13.14
-  - HDF5 1.14.6/h5py 3.14.0
+  - Python 3.14.4
+  - HDF5 1.14.6/h5py 3.15.1
   - numpy 2.3.4
-  - Torch 2.13.0
-  - TensorFlow 2.21.0
+  - Torch 2.14.1
+  - TensorFlow 2.22.0-rc0
 
 * cuda_12.8_tf_2.20_torch_2.9_m2 (method 2; 10.16 GB)
 
