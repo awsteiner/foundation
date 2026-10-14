@@ -1,0 +1,103 @@
+ARG BASE=nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
+FROM ${BASE} AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
+
+# ───────────────────────────────────────────────────────────────────
+# To fix tzdata asking for a timezone during installation
+# can set up later using sudo dpkg-reconfigure tzdata I think.
+
+ARG DEBIAN_FRONTEND=noninteractive
+# Alternatively, ENV DEBIAN_FRONTEND noninteractive
+
+# ───────────────────────────────────────────────────────────────────
+# Install Python, pip, and curl
+
+RUN apt-get -y update && apt-get -y install \
+  python3 python3-pip curl && apt-get clean 
+
+# ───────────────────────────────────────────────────────────────────
+# 2/24/26: We do a user installation of pip to ignore system pip which
+# is rejected by pip-audit. This should be revisited down the road in
+# case Ubuntu updates their system pip.
+
+ENV PATH="/root/.local/bin:$PATH"
+RUN python3 -m pip install --break-system-packages --user --upgrade \
+  pip==26.1.2 wheel
+
+# ───────────────────────────────────────────────────────────────────
+# Install HDF5
+
+WORKDIR /opt
+RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6-ubuntu-2404_gcc.deb" -o hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN dpkg -i hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN rm -f hdf5-1.14.6-ubuntu-2404_gcc.deb
+
+# ───────────────────────────────────────────────────────────────────
+# Ensure h5py uses the installed version of HDF5
+
+RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
+  --no-binary=h5py h5py==3.13.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install TensorFlow and Torch
+
+# Tensorflow includes CUDA 12.5.1, and we install the Torch
+# dependencies separately. We explicitly specify some version numbers
+# to use versions without security problems. TF announces that "This
+# TensorFlow binary is optimized to use available CPU instructions in
+# performance-critical operations.", but this doesn't mean that GPU
+# support is not included.
+
+ARG TF_VERSION=tensorflow==2.22.0rc0
+RUN pip3 install --break-system-packages keras==3.15.0 ${TF_VERSION}
+RUN pip3 install --break-system-packages \
+  filelock==3.20.3 \
+  fsspec==2025.10.0 \
+  idna==3.15 \
+  jinja2==3.1.6 \
+  msgpack==1.2.1 \
+  networkx==3.5 \
+  pillow==12.3.0 \
+  pip_audit==2.10.0 \
+  protobuf==6.33.5 \
+  pygments==2.20.0 \
+  requests==2.33.0 \
+  setuptools==83.0.0 \
+  sympy==1.14.0 \
+  triton==3.5.0 \
+  typing-extensions==4.15.0 \
+  nvidia-cusparselt-cu12==0.7.1 \
+  werkzeug==3.1.6
+ARG TORCH_VERSION="torch==2.11.0"
+ARG TORCH_URL="https://download.pytorch.org/whl/cu128"
+
+# 2/24/26: We install torch without dependencies which are already mostly
+# included in the CUDA image. This keeps most of the functionality
+# but saves about 2 GB in image size. However, this also requires we
+# manually install and take care of some of the dependencies below.
+
+RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
+  --index-url ${TORCH_URL}
+
+# If desired, output pip requirements file here
+#FROM working
+
+# ───────────────────────────────────────────────────────────────────
+# Additional nvidia libraries required
+
+RUN apt remove -y --allow-change-held-packages libnccl-dev
+RUN apt install -y --allow-change-held-packages nvshmem-cuda-12 libnccl2
+
+# ───────────────────────────────────────────────────────────────────
+# Copy the test script, set permissions and environment variables
+
+WORKDIR /opt
+COPY cuda_check.sh ./
+RUN chmod 777 cuda_check.sh
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib/python3.12/dist-packages/nvidia/cusparselt/lib:/usr/local/cuda-12.8/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
+
+WORKDIR /root
+
+
+
+

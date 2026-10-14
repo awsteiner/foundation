@@ -47,11 +47,11 @@ docker_clean2:
 # ----------------------------------------------------------------------
 
 # Nicknames
-NICKS := u24 opensuse arch m1 m2 ubuntu c13m2
+NICKS := u24 opensuse arch m1 m2 ubuntu 
 # Dockerfiles
 DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.21_torch_2.11 arch \
-	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.20_torch_2.9_m2 \
-	u26.04_tf_2.22_torch_2.14 cuda_13.0_tf_2.20_torch_2.9_m2
+	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.22_torch_2.14_m2 \
+	u26.04_tf_2.22_torch_2.14 
 
 define RULE_tlate
 $(1).nc:
