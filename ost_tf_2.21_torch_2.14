@@ -27,7 +27,7 @@ RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
 
 # ───────────────────────────────────────────────────────────────────
 
-ARG TORCH_VERSION="torch==2.11.0"
+ARG TORCH_VERSION="torch==2.14.1"
 ARG TORCH_URL="https://download.pytorch.org/whl/cpu"
 RUN pip install --break-system-packages ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
@@ -35,9 +35,9 @@ RUN pip install --break-system-packages ${TORCH_VERSION} \
 # ───────────────────────────────────────────────────────────────────
 # We include pip-audit for security.
 
-RUN pip install --break-system-packages setuptools==83.0.0 \
-  filelock==3.20.3 tensorflow==2.21.0 pip-audit==2.10.0 \
-  pip==26.1.2
+RUN pip install --break-system-packages setuptools==84.1.0 \
+  filelock==4.2.1 tensorflow==2.21.0 pip-audit==2.10.0 \
+  pip==26.2.0
 
 # ───────────────────────────────────────────────────────────────────
 # Copy scripts (even though we don't have cuda these are useful for
