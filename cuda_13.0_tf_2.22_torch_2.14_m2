@@ -92,6 +92,7 @@ RUN pip3 install --break-system-packages \
   triton==3.8.0 \
   typing-extensions==4.16.0 \
   nvidia-cusparselt-cu13==0.8.1 \
+  nvidia-nvshmem-cu13==3.4.5 \
   werkzeug==3.1.9
 ARG TORCH_VERSION="torch==2.14.1"
 ARG TORCH_URL="https://download.pytorch.org/whl/cu130"
@@ -104,23 +105,27 @@ RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
 # ───────────────────────────────────────────────────────────────────
 # Additional nvidia libraries required
 #
-# Torch 2.14.1 wants NCCL >= 2.30.7 and NVSHMEM 3.4. If the CUDA 13
-# apt repository offers several libnccl2 builds, pin the one ending
-# in +cuda13.0.
+# Torch 2.14.1 wants NCCL >= 2.30.7. If the CUDA 13 apt repository
+# offers several libnccl2 builds, pin the one ending in +cuda13.0.
+#
+# 11/20/26: NVSHMEM comes from the pip wheel (installed above) rather
+# than apt, because the apt package puts libnvshmem_host.so.3 in a
+# directory the linker does not search.
 
 RUN apt-get -y update && \
   apt-get remove -y --allow-change-held-packages libnccl-dev && \
   apt-get install -y --allow-change-held-packages \
-  nvshmem-cuda-13 libnccl2 && apt-get clean
+  libnccl2 && apt-get clean
 
 # ───────────────────────────────────────────────────────────────────
-# Register the pip-installed cuSPARSELt with the dynamic linker
-# (instead of hard-coding the site-packages path in LD_LIBRARY_PATH).
-# nvidia.cusparselt is a namespace package, hence __path__.
+# Register the pip-installed cuSPARSELt and NVSHMEM with the dynamic
+# linker (instead of hard-coding site-packages paths in
+# LD_LIBRARY_PATH). These are namespace packages, hence __path__.
 
-RUN python3 -c "import nvidia.cusparselt, os; \
-  print(os.path.join(list(nvidia.cusparselt.__path__)[0], 'lib'))" \
-  > /etc/ld.so.conf.d/cusparselt.conf && ldconfig
+RUN python3 -c "import nvidia.cusparselt, nvidia.nvshmem, os; \
+  [print(os.path.join(list(m.__path__)[0], 'lib')) \
+  for m in (nvidia.cusparselt, nvidia.nvshmem)]" \
+  > /etc/ld.so.conf.d/nvidia-pip.conf && ldconfig
 
 # ───────────────────────────────────────────────────────────────────
 # Torch's cu13 wheels no longer bundle ptxas, so point Triton
