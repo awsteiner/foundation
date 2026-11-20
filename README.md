@@ -89,6 +89,11 @@ GPUs and CUDA
 * 2/24/26: Note that there is currently no official TensorFlow release
   that supports CUDA 13.0 out-of-the-box.
 
+* 11/20/26: TensorFlow 2.22 adds initial CUDA 13 support through the
+  separate tensorflow-cuda13 package. PyTorch removed CUDA 13.0 builds
+  before 2.15 (which ships CUDA 13.2 and 13.4), so 2.14.1 is the last
+  Torch release for CUDA 13.0.
+
 * Method 1 involves adding TensorFlow to a pre-built CUDA/PyTorch
   image. For the base image, I'm using the "devel" rather than the
   "runtime" tag, because the former includes nvcc. (Not currently working.)
@@ -113,6 +118,22 @@ Older images
 
 Experimental images
 -------------------
+
+* cuda_13.0_tf_2.22_torch_2.14_m2 (method 2; not yet built)
+
+  - Ubuntu 24.04
+  - Python 3.12.3
+  - HDF5 1.14.6/h5py 3.13.0
+  - CUDA 13.0.3
+  - Torch 2.14.1 (cu130; the newest Torch with a CUDA 13.0 build)
+  - TensorFlow 2.22.0-rc1 (tensorflow-cuda13 package)
+
+* cuda_13.0_tf_2.22_torch_2.14_m1 (method 1; not yet built)
+
+  - Built on pytorch/pytorch:2.14.1-cuda13.0-cudnn9-devel
+  - HDF5 1.14.6/h5py 3.13.0
+  - Torch 2.14.1
+  - TensorFlow 2.22.0-rc1 (tensorflow-cuda13 package)
 
 * cuda_12.8_tf_2.20_torch_2.9_m1 (method 1; 7.95GB - in progress)
 
