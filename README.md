@@ -51,9 +51,10 @@ https://hub.docker.com/repository/docker/awsteiner/foundation/general
 Discussion
 ----------
 
-* TensorFlow is built with a particular HDF5 version, so we install
-  the matching version and ensure h5py uses it. This helps with HDF5
-  compatibility issues when constructing code with uses HDF5.
+* TensorFlow pins h5py, whose wheels bundle HDF5 1.14.6. We install
+  HDF5 1.14.6 ourselves (on Ubuntu 26.04, from the Ubuntu package) and
+  compile h5py against it, so h5py and our own code share one HDF5
+  library.
 
 * The ``pip-audit`` Python package is used to help avoid security
   vulnerabilities and included with the images.
@@ -123,7 +124,7 @@ Experimental images
 
   - Ubuntu 26.04
   - Python 3.14
-  - HDF5 1.14.6 (built from source)/h5py 3.15.1
+  - HDF5 1.14.6 (Ubuntu package)/h5py 3.15.1
   - CUDA 13.4.3
   - Torch 2.15.0 (cu134)
   - TensorFlow 2.22.0-rc1 (tensorflow-cuda13 package)
