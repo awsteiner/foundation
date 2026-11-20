@@ -10,6 +10,7 @@ help:
 	@echo "m2        Ubuntu 24.04; GPU method 2"
 	@echo "c13m1     Ubuntu 24.04; CUDA 13.0; GPU method 1"
 	@echo "c13m2     Ubuntu 24.04; CUDA 13.0; GPU method 2"
+	@echo "u26c      Ubuntu 26.04; CUDA 13.4; GPU method 2"
 	@echo "u24       Ubuntu 24.04"
 	@echo ""
 	@echo "Actions:"
@@ -49,12 +50,13 @@ docker_clean2:
 # ----------------------------------------------------------------------
 
 # Nicknames
-NICKS := u24 opensuse arch m1 m2 ubuntu c13m1 c13m2
+NICKS := u24 opensuse arch m1 m2 ubuntu c13m1 c13m2 u26c
 # Dockerfiles
 DFILE := u24.04_tf_2.20_torch_2.9 ost_tf_2.21_torch_2.14 arch \
 	cuda_12.8_tf_2.20_torch_2.9_m1 cuda_12.8_tf_2.22_torch_2.11_m2 \
 	u26.04_tf_2.22_torch_2.14 \
-	cuda_13.0_tf_2.22_torch_2.14_m1 cuda_13.0_tf_2.22_torch_2.14_m2
+	cuda_13.0_tf_2.22_torch_2.14_m1 cuda_13.0_tf_2.22_torch_2.14_m2 \
+	cuda_13.4_tf_2.22_torch_2.15_m2
 
 define RULE_tlate
 $(1).nc:

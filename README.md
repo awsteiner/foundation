@@ -119,6 +119,17 @@ Older images
 Experimental images
 -------------------
 
+* cuda_13.4_tf_2.22_torch_2.15_m2 (method 2; not yet built)
+
+  - Ubuntu 26.04
+  - Python 3.14
+  - HDF5 1.14.6 (built from source)/h5py 3.15.1
+  - CUDA 13.4.3
+  - Torch 2.15.0 (cu134)
+  - TensorFlow 2.22.0-rc1 (tensorflow-cuda13 package)
+  - Sets NVIDIA_DISABLE_REQUIRE=1 so that it starts on R580 (CUDA
+    13.0) drivers through CUDA minor version compatibility
+
 * cuda_13.0_tf_2.22_torch_2.14_m2 (method 2; not yet built)
 
   - Ubuntu 24.04
