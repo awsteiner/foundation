@@ -1,0 +1,79 @@
+ARG BASE=pytorch/pytorch:2.14.1-cuda13.0-cudnn9-devel
+FROM ${BASE} AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
+
+# ───────────────────────────────────────────────────────────────────
+# Method 1: add TensorFlow to the pre-built CUDA/PyTorch image. Torch
+# 2.14.1 is the newest release with a CUDA 13.0 build.
+#
+# The PyTorch image provides its own Python (in /opt/conda), which is
+# the one torch is installed into, so we use that Python throughout
+# rather than installing a second one from apt.
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update && apt-get -y install curl && apt-get clean
+
+RUN python -m pip install --upgrade pip==26.3 wheel==0.48.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install HDF5
+
+WORKDIR /opt
+RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz" \
+  -o hdf5-1.14.6.tar.gz
+RUN tar xvzf hdf5-1.14.6.tar.gz && rm hdf5-1.14.6.tar.gz
+# The github release has a non-traditional directory name
+WORKDIR /opt/hdf5-1.14.6
+RUN ./configure --with-zlib --with-szlib --prefix=/usr/local/hdf5
+RUN make -j"$(nproc)" && make install
+WORKDIR /opt
+RUN rm -rf /opt/hdf5-1.14.6
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hdf5/lib
+
+# ───────────────────────────────────────────────────────────────────
+# Ensure h5py uses the installed version of HDF5
+# (TF 2.22 requires h5py<3.15)
+
+RUN HDF5_DIR=/usr/local/hdf5 python -m pip install \
+  --no-binary=h5py h5py==3.13.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install TensorFlow
+#
+# TF 2.22 is the first release with CUDA 13 support, shipped as
+# tensorflow-cuda13. Without the [and-cuda] extra it does not pull in
+# any nvidia-* pip packages, so it will not disturb the CUDA libraries
+# that torch already uses. The 2.22 release candidates depend on
+# keras-nightly, which we replace with a pinned keras release.
+
+RUN python -m pip install \
+  pip_audit==2.10.1 \
+  protobuf==6.33.5 \
+  pillow==13.0.0 \
+  requests==2.34.2 \
+  urllib3==2.8.0 \
+  werkzeug==3.1.9
+
+ARG TF_VERSION=tensorflow-cuda13==2.22.0rc1
+RUN python -m pip install ${TF_VERSION}
+RUN python -m pip uninstall -y keras-nightly && \
+  python -m pip install keras==3.15.1
+
+# If desired, output pip requirements file here
+#FROM working
+
+# ───────────────────────────────────────────────────────────────────
+# Torch's cu13 wheels no longer bundle ptxas, so point Triton
+# (used by torch.compile) at the one in the CUDA toolkit.
+
+ENV TRITON_PTXAS_PATH=/usr/local/cuda/bin/ptxas
+
+# ───────────────────────────────────────────────────────────────────
+# Copy the test script and set permissions
+
+WORKDIR /opt
+COPY cuda_check.sh ./
+RUN chmod 777 cuda_check.sh
+WORKDIR /root

@@ -1,0 +1,139 @@
+ARG BASE=nvidia/cuda:13.0.3-cudnn-devel-ubuntu24.04
+FROM ${BASE} AS working
+LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
+
+# ───────────────────────────────────────────────────────────────────
+# To fix tzdata asking for a timezone during installation
+# can set up later using sudo dpkg-reconfigure tzdata I think.
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# ───────────────────────────────────────────────────────────────────
+# Install Python, pip, and curl
+
+RUN apt-get -y update && apt-get -y install \
+  python3 python3-pip curl && apt-get clean
+
+# ───────────────────────────────────────────────────────────────────
+# 2/24/26: We do a user installation of pip to ignore system pip which
+# is rejected by pip-audit. This should be revisited down the road in
+# case Ubuntu updates their system pip.
+
+ENV PATH="/root/.local/bin:$PATH"
+RUN python3 -m pip install --break-system-packages --user --upgrade \
+  pip==26.3 wheel==0.48.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install HDF5
+
+WORKDIR /opt
+RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6-ubuntu-2404_gcc.deb" -o hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN dpkg -i hdf5-1.14.6-ubuntu-2404_gcc.deb
+RUN rm -f hdf5-1.14.6-ubuntu-2404_gcc.deb
+
+# ───────────────────────────────────────────────────────────────────
+# Ensure h5py uses the installed version of HDF5
+# (TF 2.22 requires h5py<3.15)
+
+RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6 pip3 install --break-system-packages \
+  --no-binary=h5py h5py==3.13.0
+
+# ───────────────────────────────────────────────────────────────────
+# Install TensorFlow
+#
+# 11/20/26: TF 2.22 is the first release with CUDA 13 support, shipped
+# as a separate package, tensorflow-cuda13 (equivalently
+# tensorflow[cuda13]). Like the CUDA 12 builds, it uses the CUDA
+# libraries in the base image rather than bundling its own, so we do
+# not install the [and-cuda] extra.
+#
+# The 2.22 release candidates depend on keras-nightly rather than
+# keras. Both install into the same "keras" module, so we remove
+# keras-nightly and then install a pinned keras release.
+
+ARG TF_VERSION=tensorflow-cuda13==2.22.0rc1
+RUN pip3 install --break-system-packages ${TF_VERSION}
+RUN pip3 uninstall -y --break-system-packages keras-nightly && \
+  pip3 install --break-system-packages keras==3.15.1
+
+# ───────────────────────────────────────────────────────────────────
+# Install Torch
+#
+# Torch 2.14.1 is the newest release with a CUDA 13.0 (cu130) build;
+# PyTorch dropped CUDA 13.0 from its build matrix before 2.15, which
+# ships only CUDA 13.2 and 13.4.
+#
+# 2/24/26: We install torch without dependencies which are already
+# mostly included in the CUDA image. This keeps most of the
+# functionality but saves about 2 GB in image size. However, this
+# also requires we manually install and take care of some of the
+# dependencies below. The versions of the nvidia-* and triton
+# packages match the torch 2.14.1 requirements.
+#
+# 11/20/26: torch 2.14 no longer requires setuptools<82, so the
+# conflict with PYSEC-2026-3447 noted in the README is resolved.
+
+RUN pip3 install --break-system-packages \
+  certifi==2026.10.23 \
+  cuda-bindings==13.0.3 \
+  filelock==4.2.12 \
+  fsspec==2026.9.0 \
+  idna==3.20 \
+  jinja2==3.1.6 \
+  msgpack==1.2.4 \
+  networkx==3.7 \
+  pillow==13.0.0 \
+  pip_audit==2.10.1 \
+  protobuf==6.33.5 \
+  pygments==2.21.0 \
+  requests==2.34.2 \
+  setuptools==84.2.1 \
+  sympy==1.14.0 \
+  triton==3.8.0 \
+  typing-extensions==4.16.0 \
+  nvidia-cusparselt-cu13==0.8.1 \
+  werkzeug==3.1.9
+ARG TORCH_VERSION="torch==2.14.1"
+ARG TORCH_URL="https://download.pytorch.org/whl/cu130"
+RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
+  --index-url ${TORCH_URL}
+
+# If desired, output pip requirements file here
+#FROM working
+
+# ───────────────────────────────────────────────────────────────────
+# Additional nvidia libraries required
+#
+# Torch 2.14.1 wants NCCL >= 2.30.7 and NVSHMEM 3.4. If the CUDA 13
+# apt repository offers several libnccl2 builds, pin the one ending
+# in +cuda13.0.
+
+RUN apt-get -y update && \
+  apt-get remove -y --allow-change-held-packages libnccl-dev && \
+  apt-get install -y --allow-change-held-packages \
+  nvshmem-cuda-13 libnccl2 && apt-get clean
+
+# ───────────────────────────────────────────────────────────────────
+# Register the pip-installed cuSPARSELt with the dynamic linker
+# (instead of hard-coding the site-packages path in LD_LIBRARY_PATH).
+# nvidia.cusparselt is a namespace package, hence __path__.
+
+RUN python3 -c "import nvidia.cusparselt, os; \
+  print(os.path.join(list(nvidia.cusparselt.__path__)[0], 'lib'))" \
+  > /etc/ld.so.conf.d/cusparselt.conf && ldconfig
+
+# ───────────────────────────────────────────────────────────────────
+# Torch's cu13 wheels no longer bundle ptxas, so point Triton
+# (used by torch.compile) at the one in the CUDA toolkit.
+
+ENV TRITON_PTXAS_PATH=/usr/local/cuda/bin/ptxas
+
+# ───────────────────────────────────────────────────────────────────
+# Copy the test script, set permissions and environment variables
+
+WORKDIR /opt
+COPY cuda_check.sh ./
+RUN chmod 777 cuda_check.sh
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda-13.0/targets/x86_64-linux/lib:/HDF_Group/HDF5/1.14.6/lib
+
+WORKDIR /root
