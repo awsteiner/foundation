@@ -3,46 +3,34 @@ FROM ${BASE} AS working
 LABEL maintainer="Andrew W. Steiner <awsteiner0@protonmail.com>"
 
 # ───────────────────────────────────────────────────────────────────
-# 11/20/26: CUDA 13.0 is not available for Ubuntu 26.04 (NVIDIA's
-# 26.04 images and apt repository start at 13.3), so this image uses
-# CUDA 13.4 with the matching Torch build (cu134).
-#
-# Through CUDA minor version compatibility, this image runs on R580
-# drivers (CUDA 13.0) as well as newer ones. However, nvidia/cuda
-# images declare "cuda>=13.4", and the container toolkit refuses to
-# start them on an older driver. We disable that check here. With an
-# R580 driver, features introduced after CUDA 13.0 may fail with
-# cudaErrorCallRequiresNewerDriver. Remove this line if your driver
-# is R615 or newer.
+# 11/20/26: Through CUDA minor version compatibility, this image runs
+# on R580 drivers (CUDA 13.0) as well as newer ones. However,
+# nvidia/cuda images declare "cuda>=13.4", and the container toolkit
+# refuses to start them on an older driver. We disable that check
+# here. With an R580 driver, features introduced after CUDA 13.0 may
+# fail with cudaErrorCallRequiresNewerDriver. You may remove this line
+# if your driver is R615 or newer.
 
 ENV NVIDIA_DISABLE_REQUIRE=1
 
 # ───────────────────────────────────────────────────────────────────
-# To fix tzdata asking for a timezone during installation
-# can set up later using sudo dpkg-reconfigure tzdata I think.
+# Prevent tzdata (and other packages) from prompting during apt-get
+# install. The timezone defaults to UTC. To use a different one, run
+# the container with e.g. "-e TZ=America/Los_Angeles", or run
+# "dpkg-reconfigure tzdata" inside a container.
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 # ───────────────────────────────────────────────────────────────────
-# Install Python (3.14 on Ubuntu 26.04), pip, curl, HDF5, and what is
-# needed to build h5py from source
-#
-# 11/20/26: Ubuntu 26.04 packages HDF5 1.14.6, the same version
-# bundled in the h5py 3.13-3.15 wheels, so we use the Ubuntu package
-# instead of building HDF5 ourselves.
+# Install Python, pip, curl, and HDF5
 
 RUN apt-get -y update && apt-get -y install \
-  python3 python3-pip python3-dev curl build-essential pkg-config \
+  python3 python3-dev curl build-essential pkg-config \
   libhdf5-dev && apt-get clean
 
-# ───────────────────────────────────────────────────────────────────
-# 2/24/26: We do a user installation of pip to ignore system pip which
-# is rejected by pip-audit. This should be revisited down the road in
-# case Ubuntu updates their system pip.
-
-ENV PATH="/root/.local/bin:$PATH"
-RUN python3 -m pip install --break-system-packages --user --upgrade \
-  pip==26.3 wheel==0.48.0
+# Install an up-to-date pip (instead of Debian's python3-pip)
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | \
+  python3 - --break-system-packages pip==26.3
 
 # ───────────────────────────────────────────────────────────────────
 # Ensure h5py uses the Ubuntu version of HDF5
@@ -77,13 +65,19 @@ RUN pip3 uninstall -y --break-system-packages keras-nightly && \
 
 # ───────────────────────────────────────────────────────────────────
 # Install Torch
-#
-# 2/24/26: We install torch without dependencies which are already
-# mostly included in the CUDA image. This keeps most of the
+
+# 2/24/26: We install torch without dependencies, since most of them
+# (cuDNN, cuBLAS, cuFFT, cuSOLVER, cuSPARSE, NVRTC, and the CUDA
+# runtime) are already in the CUDA image. This keeps most of the
 # functionality but saves about 2 GB in image size. However, this
-# also requires we manually install and take care of some of the
-# dependencies below. The versions of triton, cuda-bindings, and
-# nvidia-cusparselt-cu13 follow the torch 2.15.0 requirements.
+# also requires we manually install the dependencies the image lacks.
+
+# Of the packages below, filelock, typing-extensions, setuptools,
+# sympy, networkx, jinja2, fsspec, cuda-bindings, triton,
+# nvidia-cusparselt-cu13, and nvidia-nvshmem-cu13 are torch
+# dependencies, with versions following the torch 2.15.0 requirements
+# on PyPI. NCCL is installed from apt below. The remaining packages
+# are pinned to versions without known vulnerabilities.
 
 RUN pip3 install --break-system-packages \
   certifi==2026.10.23 \
@@ -111,9 +105,6 @@ ARG TORCH_VERSION="torch==2.15.0"
 ARG TORCH_URL="https://download.pytorch.org/whl/cu134"
 RUN pip3 install --break-system-packages --no-deps ${TORCH_VERSION} \
   --index-url ${TORCH_URL}
-
-# If desired, output pip requirements file here
-#FROM working
 
 # ───────────────────────────────────────────────────────────────────
 # Additional nvidia libraries required

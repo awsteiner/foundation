@@ -12,23 +12,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libhdf5-dev && apt-get clean
 
 # Install an up-to-date pip (instead of Debian's python3-pip)
-RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 - --break-system-packages
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | \
+  python3 - --break-system-packages pip==26.3
  
 # ───────────────────────────────────────────────────────────────────
 # Install HDF5
 
-#WORKDIR /opt
-#RUN curl -L "https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6-ubuntu-2404_gcc.deb" -o hdf5-1.14.6-ubuntu-2404_gcc.deb
-#RUN dpkg -i hdf5-1.14.6-ubuntu-2404_gcc.deb
-#RUN rm -f hdf5-1.14.6-ubuntu-2404_gcc.deb
-
-# ───────────────────────────────────────────────────────────────────
-# Ensure h5py uses the installed version of HDF5
-
-#RUN HDF5_DIR=/HDF_Group/HDF5/1.14.6
-
 RUN pip3 install --break-system-packages h5py
-#  --no-binary=h5py 
 
 # ───────────────────────────────────────────────────────────────────
 # Install TensorFlow and Torch
